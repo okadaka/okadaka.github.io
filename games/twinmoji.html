@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Twinmoji😸</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #game-container {
+            width: 95vw;
+            height: 95vh;
+            max-width: 600px;
+            max-height: 800px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        #game-info {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-label {
+            font-size: 0.8em;
+            margin-bottom: 2px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-size: 1.2em;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        #lives {
+            font-size: 1.2em;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        #game-table-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 5px;
+            padding-bottom: 20vh;
+            box-sizing: border-box;
+            overflow: hidden;
+            position: relative;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        #game-table {
+            border-collapse: separate;
+            border-spacing: 1px;
+            background-color: #ccc;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #game-table td {
+            background-color: white;
+            text-align: center;
+            vertical-align: middle;
+            overflow: hidden;
+            transition: background-color 0.3s;
+        }
+
+        @media (max-aspect-ratio: 1/1) {
+            #game-container {
+                width: 100vw;
+                height: 100vh;
+                max-width: none;
+                max-height: none;
+                border-radius: 0;
+                padding: 5px;
+                padding-bottom: calc(5px + 20vh);
+            }
+        }
+
+        #message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #message-text {
+            font-size: 48px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        #message-subtext {
+            font-size: 18px;
+            color: #ccc;
+            text-align: center;
+            white-space: pre-line;
+        }
+
+        h1.game-title {
+            font-size: 48px;
+            color: #000000;
+            text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .game-title .emoji {
+            font-size: 1.2em;
+            vertical-align: middle;
+            display: inline-block;
+            transform: rotate(10deg);
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1 class="game-title">Twinmoji😸</h1>
+        <div id="game-info">
+            <div class="info-item">
+                <span class="info-label">Level</span>
+                <span id="level" class="info-value">1</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Time</span>
+                <span id="timer" class="info-value">30</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Score</span>
+                <span id="score" class="info-value">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Lives</span>
+                <span id="lives" class="info-value">❤️❤️❤️</span>
+            </div>
+        </div>
+        <div id="game-table-container">
+            <table id="game-table"></table>
+        </div>
+    </div>
+    <div id="message-overlay" style="display: none;">
+        <h1 id="message-text"></h1>
+        <div id="message-subtext"></div>
+    </div>
+    <audio id="correct-sound" src="sounds/mixkit-winning-a-coin-video-game-2069.wav"></audio>
+    <audio id="wrong-sound" src="sounds/mixkit-arcade-space-shooter-dead-notification-272.wav"></audio>
+    <audio id="game-over-sound" src="sounds/mixkit-player-losing-or-failing-2042.wav"></audio>
+
+    <script>
+        let correctSound = document.getElementById('correct-sound');
+        let wrongSound = document.getElementById('wrong-sound');
+        let gameOverSound = document.getElementById('game-over-sound');
+        let timerInterval;
+        let timeLeft;
+
+        const INITIAL_LEVEL = 1;
+        const INITIAL_SCORE = 0;
+        const INITIAL_LIVES = 5;
+        const INITIAL_TIMER = 10;
+        const GRID_SIZE_SMALL = 3;
+        const GRID_SIZE_MEDIUM = 4;
+        const GRID_SIZE_LARGE = 5;
+        const GRID_SIZE_EXTRA_LARGE = 6;
+        const LEVEL_THRESHOLD_MEDIUM = 10;
+        const LEVEL_THRESHOLD_LARGE = 20;
+        const LEVEL_THRESHOLD_EXTRA_LARGE = 30;
+        const TIMER_INCREASE_MEDIUM = 1;
+        const TIMER_INCREASE_LARGE = 3;
+        const TIMER_INCREASE_EXTRA_LARGE = 5;
+        const CELL_SIZE = 100;
+        const FONT_SIZE_RATIO = 0.6;
+        const HIGHLIGHT_DURATION = 2000;
+        const NEXT_ROUND_DELAY = 3000;
+
+        const allEmojis = [
+            '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍒', '🍑', '🥝', '🍍', '🥭', '🫐', '🍈',
+            '🐝', '🦋', '🐞', '🐛', '🐜', '🦗', '🕷️', '🦂', '🌸', '🌺', '🌼', '🌻', '🌹', '🥀', '🌷', '💐',
+            '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅', '🦉', '🐺', '🐗',
+            '🍕', '🍔', '🍟', '🌭', '🍿', '🧂', '🥓', '🥚', '🍳', '🥞', '🧈', '🍞', '🥐', '🥨', '🥯', '🥖', '🧀', '🥗', '🥙', '🥪',
+            '🌮', '🌯', '🍜', '🍝', '🍣', '🍱', '🍛', '🍲', '🥘', '🍖', '🍗', '🥩', '🍤', '🥟', '🥠', '🥡', '🍚', '🍘', '🍙', '🍥',
+            '🦄',
+            '🌱', '🌲', '🌳', '🌴', '🌵', '🌾', '🌿', '☘️', '🍀', '🍁', '🍂', '🍃', '🪴'
+        ];
+
+        let level = INITIAL_LEVEL;
+        let score = INITIAL_SCORE;
+        let timer = INITIAL_TIMER;
+        let intervalId;
+        let isPaused = false;
+        let matchingEmoji;
+        let lives = INITIAL_LIVES;
+        let wrongGuessTimeout;
+
+        function resetTimer(gridSize) {
+            clearInterval(timerInterval);
+            gridSize = Number(gridSize) || GRID_SIZE_SMALL;
+            timeLeft = 10 + (gridSize - GRID_SIZE_SMALL);
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft === 0) {
+                    clearInterval(timerInterval);
+                    lives--;
+                    updateLives();
+                    handleIncorrectOrTimeout();
+                }
+            }, 1000);
+        }
+
+        function handleIncorrectOrTimeout() {
+            highlightCorrectCells();
+            
+            playSoundAndWait(wrongSound)
+                .then(() => {
+                    if (lives === 0) {
+                        return new Promise(resolve => setTimeout(resolve, HIGHLIGHT_DURATION));
+                    } else {
+                        return new Promise(resolve => setTimeout(resolve, NEXT_ROUND_DELAY));
+                    }
+                })
+                .then(() => {
+                    if (lives === 0) {
+                        gameOver();
+                    } else {
+                        createTable();
+                        resetTimer(getCurrentGridSize());
+                    }
+                });
+        }
+
+        function playSoundAndWait(sound) {
+            return new Promise((resolve) => {
+                sound.currentTime = 0;
+                sound.play().then(() => {
+                    sound.onended = resolve;
+                }).catch((error) => {
+                    console.error('Error playing sound:', error);
+                    resolve();
+                });
+            });
+        }
+
+        function checkMatch(cell) {
+            clearInterval(timerInterval);
+            if (cell.textContent === matchingEmoji) {
+                correctMatch(cell);
+            } else {
+                incorrectMatch(cell);
+            }
+        }
+
+        function correctMatch(cell) {
+            score += timeLeft;
+            updateScore();
+            highlightCorrectCells(cell);
+            playSoundAndWait(correctSound)
+                .then(() => {
+                    setTimeout(() => {
+                        nextLevel();
+                    }, 1000);
+                });
+        }
+
+        function incorrectMatch(cell) {
+            lives--;
+            updateLives();
+            highlightCell(cell, 'red');
+            handleIncorrectOrTimeout();
+        }
+
+        function gameOver() {
+            clearInterval(timerInterval);
+            playSoundAndWait(gameOverSound)
+                .then(() => {
+                    const messageOverlay = document.getElementById('message-overlay');
+                    const messageText = document.getElementById('message-text');
+                    const messageSubtext = document.getElementById('message-subtext');
+                    const table = document.getElementById('game-table');
+
+                    messageText.textContent = 'Game Over!';
+                    messageSubtext.textContent = `Your score: ${score}\nTap or press any key to play again`;
+                    messageOverlay.style.display = 'flex';
+                    table.style.visibility = 'hidden';
+
+                    const restartHandler = (event) => {
+                        event.preventDefault();
+                        messageOverlay.removeEventListener('click', restartHandler);
+                        document.removeEventListener('keydown', restartHandler);
+                        messageOverlay.style.display = 'none';
+                        table.style.visibility = 'visible';
+                        startGame();
+                    };
+                    messageOverlay.addEventListener('click', restartHandler);
+                    document.addEventListener('keydown', restartHandler);
+                });
+        }
+
+        function createTable() {
+            const table = document.getElementById('game-table');
+            const tableContainer = document.getElementById('game-table-container');
+            table.innerHTML = '';
+            let size;
+            
+            if (level <= LEVEL_THRESHOLD_MEDIUM) {
+                size = GRID_SIZE_SMALL;
+            } else if (level <= LEVEL_THRESHOLD_LARGE) {
+                size = GRID_SIZE_MEDIUM;
+            } else if (level <= LEVEL_THRESHOLD_EXTRA_LARGE) {
+                size = GRID_SIZE_LARGE;
+            } else {
+                size = GRID_SIZE_EXTRA_LARGE;
+            }
+            
+            let shuffledEmojis = shuffleArray(allEmojis.slice());
+            let emojis = shuffledEmojis.slice(0, size * size - 1);
+            matchingEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            emojis.push(matchingEmoji);
+            emojis = shuffleArray(emojis);
+
+            const containerWidth = tableContainer.clientWidth - 10;
+            const containerHeight = tableContainer.clientHeight - 10;
+            const availableSpace = Math.min(containerWidth, containerHeight);
+            const cellSize = Math.floor((availableSpace - size - 1) / size);
+
+            const tableSize = cellSize * size + size + 1;
+
+            let scaleFactor = 1;
+            if (tableSize > availableSpace) {
+                scaleFactor = availableSpace / tableSize;
+                table.style.transform = `scale(${scaleFactor})`;
+                table.style.transformOrigin = 'top left';
+            } else {
+                table.style.transform = 'none';
+            }
+
+            table.style.width = `${tableSize}px`;
+            table.style.height = `${tableSize}px`;
+
+            for (let i = 0; i < size; i++) {
+                const row = table.insertRow();
+                for (let j = 0; j < size; j++) {
+                    const cell = row.insertCell();
+                    cell.textContent = emojis[i * size + j];
+                    cell.style.width = `${cellSize}px`;
+                    cell.style.height = `${cellSize}px`;
+                    cell.style.fontSize = `${cellSize * 0.6}px`;
+                    cell.style.cursor = 'pointer';
+                    cell.style.transition = 'background-color 0.3s';
+                    
+                    cell.addEventListener('pointerdown', (event) => {
+                        event.preventDefault();
+                        checkMatch(cell);
+                    });
+                }
+            }
+
+            const leftOffset = (containerWidth - tableSize * scaleFactor) / 2;
+            const topOffset = (containerHeight - tableSize * scaleFactor) / 2;
+            table.style.position = 'absolute';
+            table.style.left = `${leftOffset}px`;
+            table.style.top = `${topOffset}px`;
+
+            return size;
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function updateLives() {
+            document.getElementById('lives').textContent = '❤️'.repeat(lives);
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timer').textContent = timeLeft;
+        }
+
+        function highlightCorrectCells(selectedCell) {
+            const cells = document.querySelectorAll('#game-table td');
+            cells.forEach(cell => {
+                if (cell.textContent === matchingEmoji) {
+                    highlightCell(cell, 'green');
+                }
+            });
+        }
+
+        function highlightCell(cell, color) {
+            cell.style.transition = 'background-color 0.3s';
+            cell.style.backgroundColor = color;
+            setTimeout(() => {
+                cell.style.backgroundColor = '';
+                cell.style.transition = '';
+            }, HIGHLIGHT_DURATION);
+        }
+
+        function nextLevel() {
+            level++;
+            document.getElementById('level').textContent = level;
+            let newSize = createTable();
+            resetTimer(newSize);
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        function startGame() {
+            level = 1;
+            score = 0;
+            lives = 3;
+            updateLives();
+            updateScore();
+            document.getElementById('level').textContent = level;
+            let initialSize = createTable();
+            resetTimer(initialSize);
+        }
+
+        window.addEventListener('load', () => {
+            preloadSounds();
+            preventDefaultTouchBehavior();
+            startGame();
+        });
+
+        window.addEventListener('resize', createTable);
+
+        function togglePause() {
+            isPaused = !isPaused;
+            const messageOverlay = document.getElementById('message-overlay');
+            const messageText = document.getElementById('message-text');
+            const messageSubtext = document.getElementById('message-subtext');
+            const table = document.getElementById('game-table');
+
+            if (isPaused) {
+                clearInterval(timerInterval);
+                messageText.textContent = 'Game Paused';
+                messageSubtext.textContent = 'Tap to resume';
+                messageOverlay.style.display = 'flex';
+                table.style.visibility = 'hidden';
+            } else {
+                messageOverlay.style.display = 'none';
+                table.style.visibility = 'visible';
+                resetTimer(getCurrentGridSize());
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                if (document.getElementById('message-text').textContent !== 'Game Over!') {
+                    togglePause();
+                }
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            const gameTable = document.getElementById('game-table');
+            const rect = gameTable.getBoundingClientRect();
+            
+            if (event.clientX < rect.left || event.clientX > rect.right ||
+                event.clientY < rect.top || event.clientY > rect.bottom) {
+                if (document.getElementById('message-text').textContent !== 'Game Over!') {
+                    togglePause();
+                }
+            }
+        });
+
+        function preloadSounds() {
+            correctSound.load();
+            wrongSound.load();
+            gameOverSound.load();
+        }
+
+        function enableAudio() {
+            [correctSound, wrongSound, gameOverSound].forEach(sound => {
+                sound.play().then(() => {
+                    sound.pause();
+                    sound.currentTime = 0;
+                }).catch(error => console.error('Error enabling audio:', error));
+            });
+        }
+
+        document.body.addEventListener('click', enableAudio, { once: true });
+
+        function getCurrentGridSize() {
+            const table = document.getElementById('game-table');
+            return table.rows.length;
+        }
+
+        function preventDefaultTouchBehavior() {
+            const gameContainer = document.getElementById('game-container');
+            gameContainer.addEventListener('touchmove', (event) => {
+                event.preventDefault();
+            }, { passive: false });
+
+            const gameTable = document.getElementById('game-table');
+            gameTable.addEventListener('touchstart', (event) => {
+                event.preventDefault();
+            }, { passive: false });
+        }
+    </script>
+</body>
+</html>

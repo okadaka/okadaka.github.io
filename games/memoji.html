@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memoji🦑</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #game-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 820px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        #game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 10px;
+        }
+        .info-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            min-width: 60px;
+            text-align: center;
+        }
+        #lives-container {
+            font-size: 24px;
+            white-space: nowrap;
+            overflow: hidden;
+            flex-grow: 1;
+            text-align: center;
+        }
+        #level-container, #timer-container, #score-container {
+            flex-basis: 80px;
+            flex-shrink: 0;
+        }
+        #timer-container {
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            padding: 10px 0;
+        }
+        #timer {
+            color: #d9534f;
+        }
+        #score {
+            min-width: 80px;
+        }
+        #game-table {
+            border-collapse: collapse;
+            margin: 0 auto;
+        }
+        #game-table td {
+            border: 1px solid #ccc;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            width: 100px;
+            height: 100px;
+            font-size: 60px;
+        }
+        .emoji-bank {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+        .emoji-bank button {
+            font-size: 54px;
+            padding: 0;
+            cursor: pointer;
+            width: 75px;
+            height: 75px;
+            border: 2px solid #333;
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease;
+        }
+        .emoji-bank.greyed-out button {
+            opacity: 0.1;
+            cursor: default;
+        }
+        .game-section {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .challenge, .response {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .challenge div, .response div {
+            width: 75px;
+            height: 75px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 54px;
+            background-color: #f8f8f8;
+        }
+        .challenge div:empty, .response div:empty {
+            background-color: #fff;
+        }
+        h1 {
+            text-align: center;
+        }
+        #message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #message-text {
+            font-size: 48px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        #message-subtext {
+            font-size: 24px;
+            color: #ccc;
+        }
+        #game-area-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            z-index: 900;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Memoji🦑</h1>
+        
+        <div id="game-info">
+            <div class="info-item" id="level-container">
+                <span class="info-label">Level</span>
+                <span id="level" class="info-value">1</span>
+            </div>
+            <div class="info-item" id="lives-container">
+                <span id="lives">❤️❤️❤️</span>
+            </div>
+            <div class="info-item" id="timer-container">
+                <span class="info-label">Time</span>
+                <span id="timer" class="info-value">10</span>
+            </div>
+            <div class="info-item" id="score-container">
+                <span class="info-label">Score</span>
+                <span id="score" class="info-value">0</span>
+            </div>
+        </div>
+
+        <div class="game-section">
+            <div id="challenge" class="challenge"></div>
+        </div>
+        <div class="game-section">
+            <div id="response" class="response"></div>
+        </div>
+
+        <div id="emoji-bank" class="emoji-bank"></div>
+
+        <div id="game-area-overlay"></div>
+    </div>
+
+    <div id="message-overlay">
+        <div id="message-text"></div>
+        <div id="message-subtext"></div>
+    </div>
+
+    <audio id="correct-sound" src="sounds/mixkit-winning-a-coin-video-game-2069.wav"></audio>
+    <audio id="wrong-sound" src="sounds/mixkit-arcade-space-shooter-dead-notification-272.wav"></audio>
+    <audio id="game-over-sound" src="sounds/mixkit-player-losing-or-failing-2042.wav"></audio>
+
+    <script>
+        const INITIAL_LEVEL = 1;
+        const INITIAL_HEARTS = 5;
+        const INITIAL_SCORE = 0;
+        const INITIAL_TIMER = 14;
+        const CHALLENGE_DISPLAY_TIME = 5000; // milliseconds
+        const CHALLENGE_BASE_LENGTH = 3;
+        const CHALLENGE_MAX_LENGTH = 10;
+        const LEVELS_PER_DIFFICULTY_INCREASE = 10;
+
+        const ALL_EMOJIS = [
+            // Fruits
+            '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍒', '🍑', '🥝', '🍍', '🥭', '🫐', '🍈',
+            // Insects and Flowers
+            '🐝', '🦋', '🐞', '🐛', '🐜', '🦗', '🕷️', '🦂', '🌸', '🌺', '🌼', '🌻', '🌹', '🥀', '🌷', '💐',
+            // Animals
+            '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅', '🦉', '🐺', '🐗',
+            // Food
+            '🍕', '🍔', '🍟', '🌭', '🍿', '🧂', '🥓', '🥚', '🍳', '🥞', '🧈', '🍞', '🥐', '🥨', '🥯', '🥖', '🧀', '🥗', '🥙', '🥪',
+            '🌮', '🌯', '🍜', '🍝', '🍣', '🍱', '🍛', '🍲', '🥘', '🍖', '🍗', '🥩', '🍤', '🥟', '🥠', '🥡', '🍚', '🍘', '🍙', '🍥',
+            // Unicorns
+            '🦄',
+            // Plants
+            '🌱', '🌲', '🌳', '🌴', '🌵', '🌾', '🌿', '☘️', '🍀', '🍁', '🍂', '🍃', '🪴'
+        ];
+
+        let emojis = [];
+        let bankSize = 20;
+
+        let level = INITIAL_LEVEL;
+        let hearts = INITIAL_HEARTS;
+        let score = INITIAL_SCORE;
+        let timer = INITIAL_TIMER;
+        let challenge = [];
+        let userResponse = [];
+        let timerInterval;
+        let isChallengeLocked = false;
+        let isPaused = false;
+
+        const correctSound = document.getElementById('correct-sound');
+        const wrongSound = document.getElementById('wrong-sound');
+        const gameOverSound = document.getElementById('game-over-sound');
+
+        function playSound(sound) {
+            return new Promise((resolve) => {
+                sound.currentTime = 0;
+                sound.play().catch(error => console.error('Error playing sound:', error));
+                sound.onended = resolve;
+            });
+        }
+
+        function initGame() {
+            level = INITIAL_LEVEL;
+            hearts = INITIAL_HEARTS;
+            score = INITIAL_SCORE;
+            timer = INITIAL_TIMER;
+            document.getElementById('level').textContent = level;
+            updateLives();
+            document.getElementById('score').textContent = score;
+            document.getElementById('timer').textContent = timer;
+            resetEmojiBank();
+            populateEmojiBank();
+            newChallenge();
+        }
+
+        function resetEmojiBank() {
+            bankSize = 20;
+            emojis = [];
+            const shuffledEmojis = ALL_EMOJIS.sort(() => 0.5 - Math.random());
+            emojis = shuffledEmojis.slice(0, bankSize);
+        }
+
+        function populateEmojiBank() {
+            const bank = document.getElementById('emoji-bank');
+            bank.innerHTML = '';
+            emojis.forEach(emoji => {
+                const button = document.createElement('button');
+                button.textContent = emoji;
+                button.onclick = () => selectEmoji(emoji);
+                bank.appendChild(button);
+            });
+        }
+
+        function newChallenge() {
+            challenge = [];
+            userResponse = [];
+            timer = INITIAL_TIMER;
+            document.getElementById('timer').textContent = timer;
+            const challengeLength = Math.min(CHALLENGE_BASE_LENGTH + Math.floor(level / LEVELS_PER_DIFFICULTY_INCREASE), CHALLENGE_MAX_LENGTH);
+            
+            for (let i = 0; i < challengeLength; i++) {
+                challenge.push(emojis[Math.floor(Math.random() * emojis.length)]);
+            }
+            isChallengeLocked = true;
+            displayChallenge();
+            setTimeout(hideChallenge, CHALLENGE_DISPLAY_TIME);
+        }
+
+        function displayChallenge() {
+            const challengeDiv = document.getElementById('challenge');
+            const emojiBank = document.getElementById('emoji-bank');
+            challengeDiv.innerHTML = '';
+            challenge.forEach(emoji => {
+                const div = document.createElement('div');
+                div.textContent = emoji;
+                challengeDiv.appendChild(div);
+            });
+            updateResponse();
+            emojiBank.classList.add('greyed-out');
+        }
+
+        function hideChallenge() {
+            const challengeDiv = document.getElementById('challenge');
+            const emojiBank = document.getElementById('emoji-bank');
+            challengeDiv.innerHTML = '';
+            challenge.forEach(() => {
+                const div = document.createElement('div');
+                challengeDiv.appendChild(div);
+            });
+            isChallengeLocked = false;
+            emojiBank.classList.remove('greyed-out');
+            startTimer();
+        }
+
+        function updateResponse() {
+            const responseDiv = document.getElementById('response');
+            responseDiv.innerHTML = '';
+            challenge.forEach((_, index) => {
+                const div = document.createElement('div');
+                div.textContent = userResponse[index] || '';
+                responseDiv.appendChild(div);
+            });
+        }
+
+        function selectEmoji(emoji) {
+            if (isChallengeLocked || isPaused || document.getElementById('emoji-bank').classList.contains('greyed-out')) return;
+            if (userResponse.length < challenge.length) {
+                userResponse.push(emoji);
+                updateResponse();
+                if (userResponse.length === challenge.length) {
+                    checkResponse();
+                }
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (!isPaused) {
+                    timer--;
+                    document.getElementById('timer').textContent = timer;
+                    if (timer === 0) {
+                        clearInterval(timerInterval);
+                        checkResponse();
+                    }
+                }
+            }, 1000);
+        }
+
+        function updateTimer() {
+            document.getElementById('timer').textContent = timer;
+        }
+
+        function updateLives() {
+            document.getElementById('lives').textContent = '❤️'.repeat(hearts);
+        }
+
+        function checkResponse() {
+            clearInterval(timerInterval);
+            if (JSON.stringify(userResponse) === JSON.stringify(challenge)) {
+                playSound(correctSound);
+                score += timer;
+                level++;
+                document.getElementById('score').textContent = score;
+                document.getElementById('level').textContent = level;
+                
+                setTimeout(() => {
+                    newChallenge();
+                }, 500);
+            } else {
+                hearts--;
+                updateLives();
+                isChallengeLocked = true;
+                displayChallenge();
+                
+                playSound(wrongSound).then(() => {
+                    return new Promise(resolve => setTimeout(resolve, CHALLENGE_DISPLAY_TIME));
+                }).then(() => {
+                    if (hearts === 0) {
+                        return gameOver();
+                    } else {
+                        clearChallenge();
+                        clearResponse();
+                        newChallenge();
+                    }
+                });
+            }
+        }
+
+        function clearChallenge() {
+            const challengeDiv = document.getElementById('challenge');
+            challengeDiv.innerHTML = '';
+        }
+
+        function clearResponse() {
+            userResponse = [];
+            updateResponse();
+        }
+
+        function gameOver() {
+            return playSound(gameOverSound).then(() => {
+                const gameOverScreen = document.createElement('div');
+                gameOverScreen.style.position = 'fixed';
+                gameOverScreen.style.top = '0';
+                gameOverScreen.style.left = '0';
+                gameOverScreen.style.width = '100%';
+                gameOverScreen.style.height = '100%';
+                gameOverScreen.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                gameOverScreen.style.display = 'flex';
+                gameOverScreen.style.flexDirection = 'column';
+                gameOverScreen.style.justifyContent = 'center';
+                gameOverScreen.style.alignItems = 'center';
+                gameOverScreen.style.color = 'white';
+                gameOverScreen.style.fontSize = '24px';
+                gameOverScreen.style.zIndex = '1000';
+
+                const gameOverText = document.createElement('h2');
+                gameOverText.textContent = 'Game Over!';
+
+                const scoreText = document.createElement('p');
+                scoreText.textContent = `Your final score is ${score}`;
+
+                const restartButton = document.createElement('button');
+                restartButton.textContent = 'Restart';
+                restartButton.style.fontSize = '20px';
+                restartButton.style.padding = '10px 20px';
+                restartButton.style.marginTop = '20px';
+                restartButton.onclick = () => {
+                    document.body.removeChild(gameOverScreen);
+                    initGame();
+                };
+
+                gameOverScreen.appendChild(gameOverText);
+                gameOverScreen.appendChild(scoreText);
+                gameOverScreen.appendChild(restartButton);
+
+                document.body.appendChild(gameOverScreen);
+            });
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            const messageOverlay = document.getElementById('message-overlay');
+            const messageText = document.getElementById('message-text');
+            const messageSubtext = document.getElementById('message-subtext');
+            const gameAreaOverlay = document.getElementById('game-area-overlay');
+
+            if (isPaused) {
+                messageText.textContent = 'Game Paused';
+                messageSubtext.textContent = 'Press Space to resume';
+                messageOverlay.style.display = 'flex';
+                gameAreaOverlay.style.display = 'block';
+                clearInterval(timerInterval);
+            } else {
+                messageOverlay.style.display = 'none';
+                gameAreaOverlay.style.display = 'none';
+                if (!isChallengeLocked) {
+                    startTimer();
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                togglePause();
+            }
+        });
+
+        // Preload sounds
+        function preloadSounds() {
+            correctSound.load();
+            wrongSound.load();
+            gameOverSound.load();
+        }
+
+        // Call preloadSounds before initializing the game
+        preloadSounds();
+        initGame();
+    </script>
+</body>
+</html>
