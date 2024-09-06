@@ -15,52 +15,62 @@
             background-color: #f0f0f0;
         }
         #game-container {
+            width: 95vw;
+            height: 95vh;
+            max-width: 820px;
+            max-height: 1000px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
             background-color: white;
             border-radius: 10px;
-            padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 820px;
-            box-sizing: border-box;
-            position: relative;
+            overflow: hidden;
         }
         #game-info {
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            background-color: #f8f8f8;
-            border-radius: 5px;
+            margin-bottom: 10px;
+            background-color: #f0f0f0;
             padding: 10px;
-            width: 100%;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
         }
         .info-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0 10px;
+            justify-content: center;
         }
         .info-label {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 5px;
+            font-size: 0.9em;
+            margin-bottom: 2px;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
         .info-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
+            font-size: 1.3em;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        #score-container {
+            min-width: 80px;
+        }
+        #score {
             min-width: 60px;
-            text-align: center;
+            display: inline-block;
         }
-        #lives-container {
-            font-size: 24px;
-            white-space: nowrap;
-            overflow: hidden;
-            flex-grow: 1;
-            text-align: center;
-        }
-        #level-container, #timer-container, #score-container {
-            flex-basis: 80px;
-            flex-shrink: 0;
+        #lives {
+            font-size: 1.3em;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
         #timer-container {
             background-color: #e0e0e0;
@@ -69,9 +79,7 @@
         }
         #timer {
             color: #d9534f;
-        }
-        #score {
-            min-width: 80px;
+            font-weight: 700;
         }
         #game-table {
             border-collapse: collapse;
@@ -86,26 +94,47 @@
             height: 100px;
             font-size: 60px;
         }
+        #emoji-bank-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: hidden;
+            position: relative;
+            margin-top: auto;
+            min-height: 30vh;
+        }
         .emoji-bank {
             display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 5px;
-            margin-top: 20px;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 4px;
+            justify-content: center;
+            align-content: center;
+            width: 100%;
+            height: 100%;
+            max-width: 480px;
+            max-height: 240px;
         }
         .emoji-bank button {
-            font-size: 54px;
+            font-size: 48px;
             padding: 0;
             cursor: pointer;
-            width: 75px;
-            height: 75px;
+            width: 100%;
+            height: 100%;
             border: 2px solid #333;
             background-color: #f8f8f8;
             border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.1s ease;
+        }
+        .emoji-bank button:active {
+            transform: scale(0.95);
         }
         .emoji-bank.greyed-out button {
             opacity: 0.1;
@@ -115,28 +144,44 @@
             display: flex;
             justify-content: center;
             margin: 10px 0;
+            width: 100%;
         }
         .challenge, .response {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 5px;
+            width: 100%;
+            max-width: 480px;
         }
         .challenge div, .response div {
-            width: 75px;
-            height: 75px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
             border: 2px solid #333;
             border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 54px;
+            font-size: 36px;
             background-color: #f8f8f8;
         }
         .challenge div:empty, .response div:empty {
             background-color: #fff;
         }
-        h1 {
+        h1.game-title {
+            font-size: 48px;
+            color: #000000;
             text-align: center;
+            margin-bottom: 20px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        .game-title .emoji {
+            font-size: 1.2em;
+            vertical-align: middle;
+            display: inline-block;
+            transform: rotate(10deg);
+            margin: 0 5px;
         }
         #message-overlay {
             position: fixed;
@@ -171,26 +216,28 @@
             z-index: 900;
         }
     </style>
+    <script src="sounds/howler.min.js"></script>
 </head>
 <body>
     <div id="game-container">
-        <h1>Memoji🦑</h1>
+        <h1 class="game-title">Memoji<span class="emoji">🦑</span></h1>
         
         <div id="game-info">
-            <div class="info-item" id="level-container">
+            <div class="info-item">
                 <span class="info-label">Level</span>
                 <span id="level" class="info-value">1</span>
             </div>
-            <div class="info-item" id="lives-container">
-                <span id="lives">❤️❤️❤️</span>
-            </div>
-            <div class="info-item" id="timer-container">
+            <div class="info-item">
                 <span class="info-label">Time</span>
                 <span id="timer" class="info-value">10</span>
             </div>
             <div class="info-item" id="score-container">
                 <span class="info-label">Score</span>
                 <span id="score" class="info-value">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Lives</span>
+                <span id="lives" class="info-value">❤️❤️❤️</span>
             </div>
         </div>
 
@@ -201,7 +248,9 @@
             <div id="response" class="response"></div>
         </div>
 
-        <div id="emoji-bank" class="emoji-bank"></div>
+        <div id="emoji-bank-container">
+            <div id="emoji-bank" class="emoji-bank"></div>
+        </div>
 
         <div id="game-area-overlay"></div>
     </div>
@@ -211,11 +260,8 @@
         <div id="message-subtext"></div>
     </div>
 
-    <audio id="correct-sound" src="sounds/mixkit-winning-a-coin-video-game-2069.wav"></audio>
-    <audio id="wrong-sound" src="sounds/mixkit-arcade-space-shooter-dead-notification-272.wav"></audio>
-    <audio id="game-over-sound" src="sounds/mixkit-player-losing-or-failing-2042.wav"></audio>
-
     <script>
+        // Constants
         const INITIAL_LEVEL = 1;
         const INITIAL_HEARTS = 5;
         const INITIAL_SCORE = 0;
@@ -224,6 +270,15 @@
         const CHALLENGE_BASE_LENGTH = 3;
         const CHALLENGE_MAX_LENGTH = 10;
         const LEVELS_PER_DIFFICULTY_INCREASE = 10;
+        const BANK_SIZE = 18;
+        const BANK_ROWS = 3;
+        const BANK_COLUMNS = 6;
+        const CORRECT_MATCH_DELAY = 500;
+        const GAME_OVER_FONT_SIZE = 24;
+        const RESTART_BUTTON_FONT_SIZE = 20;
+        const RESTART_BUTTON_PADDING = '10px 20px';
+        const RESTART_BUTTON_MARGIN_TOP = '20px';
+        const TIMER_INTERVAL = 1000; // 1 second
 
         const ALL_EMOJIS = [
             // Fruits
@@ -231,7 +286,7 @@
             // Insects and Flowers
             '🐝', '🦋', '🐞', '🐛', '🐜', '🦗', '🕷️', '🦂', '🌸', '🌺', '🌼', '🌻', '🌹', '🥀', '🌷', '💐',
             // Animals
-            '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅', '🦉', '🐺', '🐗',
+            '🐶', '🐺', '🐭', '🐹', '🐰', '🦊', '🐻', '🐻‍❄️', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅', '🦉', '🐺', '🐗',
             // Food
             '🍕', '🍔', '🍟', '🌭', '🍿', '🧂', '🥓', '🥚', '🍳', '🥞', '🧈', '🍞', '🥐', '🥨', '🥯', '🥖', '🧀', '🥗', '🥙', '🥪',
             '🌮', '🌯', '🍜', '🍝', '🍣', '🍱', '🍛', '🍲', '🥘', '🍖', '🍗', '🥩', '🍤', '🥟', '🥠', '🥡', '🍚', '🍘', '🍙', '🍥',
@@ -242,8 +297,6 @@
         ];
 
         let emojis = [];
-        let bankSize = 20;
-
         let level = INITIAL_LEVEL;
         let hearts = INITIAL_HEARTS;
         let score = INITIAL_SCORE;
@@ -254,15 +307,22 @@
         let isChallengeLocked = false;
         let isPaused = false;
 
-        const correctSound = document.getElementById('correct-sound');
-        const wrongSound = document.getElementById('wrong-sound');
-        const gameOverSound = document.getElementById('game-over-sound');
+        const sounds = {
+            correct: new Howl({
+                src: ['sounds/mixkit-winning-a-coin-video-game-2069.wav']
+            }),
+            wrong: new Howl({
+                src: ['sounds/mixkit-arcade-space-shooter-dead-notification-272.wav']
+            }),
+            gameOver: new Howl({
+                src: ['sounds/mixkit-player-losing-or-failing-2042.wav']
+            })
+        };
 
         function playSound(sound) {
             return new Promise((resolve) => {
-                sound.currentTime = 0;
-                sound.play().catch(error => console.error('Error playing sound:', error));
-                sound.onended = resolve;
+                sound.play();
+                sound.once('end', resolve);
             });
         }
 
@@ -281,10 +341,9 @@
         }
 
         function resetEmojiBank() {
-            bankSize = 20;
             emojis = [];
             const shuffledEmojis = ALL_EMOJIS.sort(() => 0.5 - Math.random());
-            emojis = shuffledEmojis.slice(0, bankSize);
+            emojis = shuffledEmojis.slice(0, BANK_SIZE);
         }
 
         function populateEmojiBank() {
@@ -295,6 +354,30 @@
                 button.textContent = emoji;
                 button.onclick = () => selectEmoji(emoji);
                 bank.appendChild(button);
+            });
+            resizeEmojiBankIcons();
+        }
+
+        function resizeEmojiBankIcons() {
+            const container = document.getElementById('emoji-bank-container');
+            const bank = document.getElementById('emoji-bank');
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            // Use a larger portion of the available space
+            const availableSpace = Math.min(containerWidth, containerHeight * 1.5);
+            
+            // Increase the cell size by reducing the space reserved for gaps
+            const cellSize = Math.floor((availableSpace - 10) / 6); // 6 columns, 10px for gaps
+
+            bank.style.width = `${cellSize * 6 + 10}px`;
+            bank.style.height = `${cellSize * 3 + 6}px`;
+
+            const buttons = bank.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.style.width = `${cellSize}px`;
+                button.style.height = `${cellSize}px`;
+                button.style.fontSize = `${Math.floor(cellSize * 0.7)}px`; // Slightly larger font size
             });
         }
 
@@ -310,6 +393,7 @@
             }
             isChallengeLocked = true;
             displayChallenge();
+            resizeGameElements();
             setTimeout(hideChallenge, CHALLENGE_DISPLAY_TIME);
         }
 
@@ -324,6 +408,7 @@
             });
             updateResponse();
             emojiBank.classList.add('greyed-out');
+            resizeChallengeAndResponse();
         }
 
         function hideChallenge() {
@@ -336,6 +421,7 @@
             });
             isChallengeLocked = false;
             emojiBank.classList.remove('greyed-out');
+            resizeChallengeAndResponse();
             startTimer();
         }
 
@@ -347,6 +433,7 @@
                 div.textContent = userResponse[index] || '';
                 responseDiv.appendChild(div);
             });
+            resizeChallengeAndResponse();
         }
 
         function selectEmoji(emoji) {
@@ -371,7 +458,7 @@
                         checkResponse();
                     }
                 }
-            }, 1000);
+            }, TIMER_INTERVAL);
         }
 
         function updateTimer() {
@@ -385,7 +472,7 @@
         function checkResponse() {
             clearInterval(timerInterval);
             if (JSON.stringify(userResponse) === JSON.stringify(challenge)) {
-                playSound(correctSound);
+                playSound(sounds.correct);
                 score += timer;
                 level++;
                 document.getElementById('score').textContent = score;
@@ -393,14 +480,14 @@
                 
                 setTimeout(() => {
                     newChallenge();
-                }, 500);
+                }, CORRECT_MATCH_DELAY);
             } else {
                 hearts--;
                 updateLives();
                 isChallengeLocked = true;
                 displayChallenge();
                 
-                playSound(wrongSound).then(() => {
+                playSound(sounds.wrong).then(() => {
                     return new Promise(resolve => setTimeout(resolve, CHALLENGE_DISPLAY_TIME));
                 }).then(() => {
                     if (hearts === 0) {
@@ -425,43 +512,25 @@
         }
 
         function gameOver() {
-            return playSound(gameOverSound).then(() => {
-                const gameOverScreen = document.createElement('div');
-                gameOverScreen.style.position = 'fixed';
-                gameOverScreen.style.top = '0';
-                gameOverScreen.style.left = '0';
-                gameOverScreen.style.width = '100%';
-                gameOverScreen.style.height = '100%';
-                gameOverScreen.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-                gameOverScreen.style.display = 'flex';
-                gameOverScreen.style.flexDirection = 'column';
-                gameOverScreen.style.justifyContent = 'center';
-                gameOverScreen.style.alignItems = 'center';
-                gameOverScreen.style.color = 'white';
-                gameOverScreen.style.fontSize = '24px';
-                gameOverScreen.style.zIndex = '1000';
+            return playSound(sounds.gameOver).then(() => {
+                const messageOverlay = document.getElementById('message-overlay');
+                const messageText = document.getElementById('message-text');
+                const messageSubtext = document.getElementById('message-subtext');
+                const table = document.getElementById('game-table');
 
-                const gameOverText = document.createElement('h2');
-                gameOverText.textContent = 'Game Over!';
-
-                const scoreText = document.createElement('p');
-                scoreText.textContent = `Your final score is ${score}`;
-
-                const restartButton = document.createElement('button');
-                restartButton.textContent = 'Restart';
-                restartButton.style.fontSize = '20px';
-                restartButton.style.padding = '10px 20px';
-                restartButton.style.marginTop = '20px';
-                restartButton.onclick = () => {
-                    document.body.removeChild(gameOverScreen);
+                messageText.textContent = 'Game Over!';
+                messageSubtext.innerHTML = `Your score: ${score}<br><br>Tap or press any key to play again`;
+                messageOverlay.style.display = 'flex';
+                
+                const restartHandler = (event) => {
+                    event.preventDefault();
+                    messageOverlay.removeEventListener('click', restartHandler);
+                    document.removeEventListener('keydown', restartHandler);
+                    messageOverlay.style.display = 'none';
                     initGame();
                 };
-
-                gameOverScreen.appendChild(gameOverText);
-                gameOverScreen.appendChild(scoreText);
-                gameOverScreen.appendChild(restartButton);
-
-                document.body.appendChild(gameOverScreen);
+                messageOverlay.addEventListener('click', restartHandler);
+                document.addEventListener('keydown', restartHandler);
             });
         }
 
@@ -474,7 +543,7 @@
 
             if (isPaused) {
                 messageText.textContent = 'Game Paused';
-                messageSubtext.textContent = 'Press Space to resume';
+                messageSubtext.textContent = 'Tap to resume';
                 messageOverlay.style.display = 'flex';
                 gameAreaOverlay.style.display = 'block';
                 clearInterval(timerInterval);
@@ -494,16 +563,73 @@
             }
         });
 
-        // Preload sounds
-        function preloadSounds() {
-            correctSound.load();
-            wrongSound.load();
-            gameOverSound.load();
+        document.addEventListener('click', (event) => {
+            const gameContainer = document.getElementById('game-container');
+            const rect = gameContainer.getBoundingClientRect();
+            
+            if (event.clientX < rect.left || event.clientX > rect.right ||
+                event.clientY < rect.top || event.clientY > rect.bottom) {
+                togglePause();
+            }
+        });
+
+        function preventDefaultTouchBehavior() {
+            const gameContainer = document.getElementById('game-container');
+            gameContainer.addEventListener('touchmove', (event) => {
+                event.preventDefault();
+            }, { passive: false });
+
+            const emojiBank = document.getElementById('emoji-bank');
+            emojiBank.addEventListener('touchstart', (event) => {
+                event.preventDefault();
+            }, { passive: false });
         }
 
-        // Call preloadSounds before initializing the game
-        preloadSounds();
-        initGame();
+        window.addEventListener('load', () => {
+            preventDefaultTouchBehavior();
+            initGame();
+            resizeGameElements();
+        });
+
+        function resizeGameElements() {
+            resizeEmojiBankIcons();
+            resizeChallengeAndResponse();
+        }
+
+        function resizeChallengeAndResponse() {
+            const gameContainer = document.getElementById('game-container');
+            const challengeDiv = document.getElementById('challenge');
+            const responseDiv = document.getElementById('response');
+            const emojiBank = document.getElementById('emoji-bank');
+            const containerWidth = gameContainer.clientWidth;
+            
+            // Get the size of emoji bank cells
+            const bankCellSize = parseInt(emojiBank.querySelector('button').style.width);
+            
+            // Calculate the max size for challenge/response cells (50% larger than bank cells)
+            const maxCellSize = Math.floor(bankCellSize * 1.5);
+            
+            // Calculate the cell size based on available width and number of challenge emojis
+            const cellSize = Math.min(
+                Math.floor((containerWidth - 40) / challenge.length),
+                maxCellSize
+            );
+
+            // Calculate the max width for the challenge/response divs
+            const maxWidth = Math.min(cellSize * challenge.length + (challenge.length - 1) * 5, containerWidth - 20);
+
+            [challengeDiv, responseDiv].forEach(div => {
+                div.style.maxWidth = `${maxWidth}px`;
+                const cells = div.querySelectorAll('div');
+                cells.forEach(cell => {
+                    cell.style.width = `${cellSize}px`;
+                    cell.style.height = `${cellSize}px`;
+                    cell.style.fontSize = `${Math.floor(cellSize * 0.6)}px`;
+                });
+            });
+        }
+
+        window.addEventListener('resize', resizeGameElements);
     </script>
 </body>
 </html>
