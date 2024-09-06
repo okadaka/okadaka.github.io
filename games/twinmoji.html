@@ -159,6 +159,7 @@
             margin: 0 5px;
         }
     </style>
+    <script src="sounds/howler.min.js"></script>
 </head>
 <body>
     <div id="game-container">
@@ -189,14 +190,8 @@
         <h1 id="message-text"></h1>
         <div id="message-subtext"></div>
     </div>
-    <audio id="correct-sound" src="sounds/mixkit-winning-a-coin-video-game-2069.wav"></audio>
-    <audio id="wrong-sound" src="sounds/mixkit-arcade-space-shooter-dead-notification-272.wav"></audio>
-    <audio id="game-over-sound" src="sounds/mixkit-player-losing-or-failing-2042.wav"></audio>
 
     <script>
-        let correctSound = document.getElementById('correct-sound');
-        let wrongSound = document.getElementById('wrong-sound');
-        let gameOverSound = document.getElementById('game-over-sound');
         let timerInterval;
         let timeLeft;
 
@@ -238,6 +233,18 @@
         let lives = INITIAL_LIVES;
         let wrongGuessTimeout;
 
+        const sounds = {
+            correct: new Howl({
+                src: ['sounds/mixkit-winning-a-coin-video-game-2069.wav']
+            }),
+            wrong: new Howl({
+                src: ['sounds/mixkit-arcade-space-shooter-dead-notification-272.wav']
+            }),
+            gameOver: new Howl({
+                src: ['sounds/mixkit-player-losing-or-failing-2042.wav']
+            })
+        };
+
         function resetTimer(gridSize) {
             clearInterval(timerInterval);
             gridSize = Number(gridSize) || GRID_SIZE_SMALL;
@@ -258,7 +265,7 @@
         function handleIncorrectOrTimeout() {
             highlightCorrectCells();
             
-            playSoundAndWait(wrongSound)
+            playSoundAndWait(sounds.wrong)
                 .then(() => {
                     if (lives === 0) {
                         return new Promise(resolve => setTimeout(resolve, HIGHLIGHT_DURATION));
@@ -278,13 +285,8 @@
 
         function playSoundAndWait(sound) {
             return new Promise((resolve) => {
-                sound.currentTime = 0;
-                sound.play().then(() => {
-                    sound.onended = resolve;
-                }).catch((error) => {
-                    console.error('Error playing sound:', error);
-                    resolve();
-                });
+                sound.play();
+                sound.once('end', resolve);
             });
         }
 
@@ -301,7 +303,7 @@
             score += timeLeft;
             updateScore();
             highlightCorrectCells(cell);
-            playSoundAndWait(correctSound)
+            playSoundAndWait(sounds.correct)
                 .then(() => {
                     setTimeout(() => {
                         nextLevel();
@@ -318,7 +320,7 @@
 
         function gameOver() {
             clearInterval(timerInterval);
-            playSoundAndWait(gameOverSound)
+            playSoundAndWait(sounds.gameOver)
                 .then(() => {
                     const messageOverlay = document.getElementById('message-overlay');
                     const messageText = document.getElementById('message-text');
@@ -468,7 +470,6 @@
         }
 
         window.addEventListener('load', () => {
-            preloadSounds();
             preventDefaultTouchBehavior();
             startGame();
         });
@@ -515,23 +516,6 @@
                 }
             }
         });
-
-        function preloadSounds() {
-            correctSound.load();
-            wrongSound.load();
-            gameOverSound.load();
-        }
-
-        function enableAudio() {
-            [correctSound, wrongSound, gameOverSound].forEach(sound => {
-                sound.play().then(() => {
-                    sound.pause();
-                    sound.currentTime = 0;
-                }).catch(error => console.error('Error enabling audio:', error));
-            });
-        }
-
-        document.body.addEventListener('click', enableAudio, { once: true });
 
         function getCurrentGridSize() {
             const table = document.getElementById('game-table');
