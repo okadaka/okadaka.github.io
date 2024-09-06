@@ -8,20 +8,21 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
         }
         #game-container {
             width: 95vw;
-            height: 95vh;
+            height: 85vh;
             max-width: 820px;
             max-height: 1000px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
             padding: 10px;
             box-sizing: border-box;
@@ -29,6 +30,11 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            margin-top: 2.5vh;
+        }
+        #footer {
+            height: 10vh;
+            width: 100%;
         }
         #game-info {
             width: 100%;
@@ -100,24 +106,22 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            padding: 10px;
+            padding: 5px;
             box-sizing: border-box;
             overflow: hidden;
             position: relative;
             margin-top: auto;
-            min-height: 30vh;
+            min-height: 25vh;
         }
         .emoji-bank {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            gap: 4px;
+            gap: 5px;
             justify-content: center;
             align-content: center;
             width: 100%;
             height: 100%;
-            max-width: 480px;
-            max-height: 240px;
         }
         .emoji-bank button {
             font-size: 48px;
@@ -143,7 +147,7 @@
         .game-section {
             display: flex;
             justify-content: center;
-            margin: 10px 0;
+            margin: 5px 0;
             width: 100%;
         }
         .challenge, .response {
@@ -215,6 +219,14 @@
             display: none;
             z-index: 900;
         }
+
+        #game-middle-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+        }
     </style>
     <script src="sounds/howler.min.js"></script>
 </head>
@@ -241,11 +253,13 @@
             </div>
         </div>
 
-        <div class="game-section">
-            <div id="challenge" class="challenge"></div>
-        </div>
-        <div class="game-section">
-            <div id="response" class="response"></div>
+        <div id="game-middle-section">
+            <div class="game-section">
+                <div id="challenge" class="challenge"></div>
+            </div>
+            <div class="game-section">
+                <div id="response" class="response"></div>
+            </div>
         </div>
 
         <div id="emoji-bank-container">
@@ -254,6 +268,7 @@
 
         <div id="game-area-overlay"></div>
     </div>
+    <div id="footer"></div>
 
     <div id="message-overlay">
         <div id="message-text"></div>
@@ -288,7 +303,7 @@
             // Animals
             '🐶', '🐺', '🐭', '🐹', '🐰', '🦊', '🐻', '🐻‍❄️', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🦆', '🦅', '🦉', '🐺', '🐗',
             // Food
-            '🍕', '🍔', '🍟', '🌭', '🍿', '🧂', '🥓', '🥚', '🍳', '🥞', '🧈', '🍞', '🥐', '🥨', '🥯', '🥖', '🧀', '🥗', '🥙', '🥪',
+            '🍕', '🍔', '🍟', '🌭', '🍿', '🧂', '🥓', '🥚', '🍳', '🥞', '🧀', '🥗', '🥙', '🥪',
             '🌮', '🌯', '🍜', '🍝', '🍣', '🍱', '🍛', '🍲', '🥘', '🍖', '🍗', '🥩', '🍤', '🥟', '🥠', '🥡', '🍚', '🍘', '🍙', '🍥',
             // Unicorns
             '🦄',
@@ -358,26 +373,23 @@
             resizeEmojiBankIcons();
         }
 
-        function resizeEmojiBankIcons() {
+        function resizeEmojiBankIcons(iconSize) {
             const container = document.getElementById('emoji-bank-container');
             const bank = document.getElementById('emoji-bank');
             const containerWidth = container.clientWidth;
             const containerHeight = container.clientHeight;
-            
-            // Use a larger portion of the available space
-            const availableSpace = Math.min(containerWidth, containerHeight * 1.5);
-            
-            // Increase the cell size by reducing the space reserved for gaps
-            const cellSize = Math.floor((availableSpace - 10) / 6); // 6 columns, 10px for gaps
 
-            bank.style.width = `${cellSize * 6 + 10}px`;
-            bank.style.height = `${cellSize * 3 + 6}px`;
+            const bankWidth = Math.min(iconSize * 6 + 25, containerWidth);
+            const bankHeight = Math.min(iconSize * 3 + 10, containerHeight);
+
+            bank.style.width = `${bankWidth}px`;
+            bank.style.height = `${bankHeight}px`;
 
             const buttons = bank.querySelectorAll('button');
             buttons.forEach(button => {
-                button.style.width = `${cellSize}px`;
-                button.style.height = `${cellSize}px`;
-                button.style.fontSize = `${Math.floor(cellSize * 0.7)}px`; // Slightly larger font size
+                button.style.width = `${iconSize}px`;
+                button.style.height = `${iconSize}px`;
+                button.style.fontSize = `${Math.floor(iconSize * 0.7)}px`;
             });
         }
 
@@ -592,39 +604,61 @@
         });
 
         function resizeGameElements() {
-            resizeEmojiBankIcons();
-            resizeChallengeAndResponse();
+            const iconSize = calculateIconSize();
+            resizeEmojiBankIcons(iconSize);
+            resizeChallengeAndResponse(iconSize);
         }
 
-        function resizeChallengeAndResponse() {
+        function calculateIconSize() {
+            const container = document.getElementById('emoji-bank-container');
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            // Calculate cell size based on the smaller of width or height
+            const cellSize = Math.floor(Math.min(
+                (containerWidth - 25) / 6,  // 6 columns, 25px for gaps
+                (containerHeight - 10) / 3  // 3 rows, 10px for gaps
+            ));
+
+            return cellSize;
+        }
+
+        function resizeEmojiBankIcons(iconSize) {
+            const container = document.getElementById('emoji-bank-container');
+            const bank = document.getElementById('emoji-bank');
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+
+            const bankWidth = Math.min(iconSize * 6 + 25, containerWidth);
+            const bankHeight = Math.min(iconSize * 3 + 10, containerHeight);
+
+            bank.style.width = `${bankWidth}px`;
+            bank.style.height = `${bankHeight}px`;
+
+            const buttons = bank.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.style.width = `${iconSize}px`;
+                button.style.height = `${iconSize}px`;
+                button.style.fontSize = `${Math.floor(iconSize * 0.7)}px`;
+            });
+        }
+
+        function resizeChallengeAndResponse(iconSize) {
             const gameContainer = document.getElementById('game-container');
             const challengeDiv = document.getElementById('challenge');
             const responseDiv = document.getElementById('response');
-            const emojiBank = document.getElementById('emoji-bank');
             const containerWidth = gameContainer.clientWidth;
-            
-            // Get the size of emoji bank cells
-            const bankCellSize = parseInt(emojiBank.querySelector('button').style.width);
-            
-            // Calculate the max size for challenge/response cells (50% larger than bank cells)
-            const maxCellSize = Math.floor(bankCellSize * 1.5);
-            
-            // Calculate the cell size based on available width and number of challenge emojis
-            const cellSize = Math.min(
-                Math.floor((containerWidth - 40) / challenge.length),
-                maxCellSize
-            );
 
             // Calculate the max width for the challenge/response divs
-            const maxWidth = Math.min(cellSize * challenge.length + (challenge.length - 1) * 5, containerWidth - 20);
+            const maxWidth = Math.min(iconSize * challenge.length + (challenge.length - 1) * 5, containerWidth - 20);
 
             [challengeDiv, responseDiv].forEach(div => {
                 div.style.maxWidth = `${maxWidth}px`;
                 const cells = div.querySelectorAll('div');
                 cells.forEach(cell => {
-                    cell.style.width = `${cellSize}px`;
-                    cell.style.height = `${cellSize}px`;
-                    cell.style.fontSize = `${Math.floor(cellSize * 0.6)}px`;
+                    cell.style.width = `${iconSize}px`;
+                    cell.style.height = `${iconSize}px`;
+                    cell.style.fontSize = `${Math.floor(iconSize * 0.7)}px`;
                 });
             });
         }
