@@ -368,6 +368,10 @@
                 const button = document.createElement('button');
                 button.textContent = emoji;
                 button.onclick = () => selectEmoji(emoji);
+                button.addEventListener('touchstart', (event) => {
+                    event.preventDefault();
+                    selectEmoji(emoji);
+                }, { passive: false });
                 bank.appendChild(button);
             });
             resizeEmojiBankIcons();
@@ -588,11 +592,6 @@
         function preventDefaultTouchBehavior() {
             const gameContainer = document.getElementById('game-container');
             gameContainer.addEventListener('touchmove', (event) => {
-                event.preventDefault();
-            }, { passive: false });
-
-            const emojiBank = document.getElementById('emoji-bank');
-            emojiBank.addEventListener('touchstart', (event) => {
                 event.preventDefault();
             }, { passive: false });
         }
