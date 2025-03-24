@@ -1,7 +1,23 @@
+// Add this just before the PuzzleGame class definition
+const puzzleImages = [
+    'images/image1.jpg',
+    'images/image2.jpg',
+    'images/image3.jpg'
+];
+
 class PuzzleGame {
     constructor(imagePath, puzzlePieces = 64) {
+        // Handle array of images
+        if (Array.isArray(imagePath)) {
+            const randomIndex = Math.floor(Math.random() * imagePath.length);
+            this.imagePath = imagePath[randomIndex];
+            this.allImages = imagePath; // Store all images for potential reuse
+        } else {
+            this.imagePath = imagePath;
+            this.allImages = [imagePath]; // Convert single image to array
+        }
+        
         // Game configuration
-        this.imagePath = imagePath;
         this.puzzlePieces = puzzlePieces;
         this.gridSize = Math.sqrt(puzzlePieces); // Assuming square grid
         
@@ -412,6 +428,14 @@ class PuzzleGame {
                 event.preventDefault();
             }
         }, { passive: false });
+        
+        // Add new puzzle button if it exists
+        const newPuzzleBtn = document.getElementById('new-puzzle-btn');
+        if (newPuzzleBtn) {
+            newPuzzleBtn.addEventListener('click', () => {
+                this.changeToRandomImage();
+            });
+        }
     }
     
     handleMouseDown(e) {
@@ -668,6 +692,23 @@ class PuzzleGame {
         const randomIndex = Math.floor(Math.random() * soundsArray.length);
         soundsArray[randomIndex].play();
     }
+    
+    // Add a method to change to a new random image
+    changeToRandomImage() {
+        // Choose a different image than the current one
+        let availableImages = this.allImages.filter(img => img !== this.imagePath);
+        
+        // If no other images available, use the current one
+        if (availableImages.length === 0) {
+            availableImages = this.allImages;
+        }
+        
+        const randomIndex = Math.floor(Math.random() * availableImages.length);
+        this.imagePath = availableImages[randomIndex];
+        
+        // Reset and restart the game with the new image
+        this.resetGame();
+    }
 }
 
 // Create confetti.js script
@@ -677,6 +718,6 @@ document.head.appendChild(confettiScript);
 
 // Initialize the game when the page is loaded
 window.addEventListener('load', () => {
-    // You'll need to provide an actual image path
-    const game = new PuzzleGame('DSC08747.jpg', 64);
+    // Pass the entire array to the game constructor
+    const game = new PuzzleGame(puzzleImages, 64);
 }); 
