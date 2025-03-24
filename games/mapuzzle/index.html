@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapuzzle</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+</head>
+<body>
+    <div id="game-container">
+        <div id="main-panel">
+            <div id="puzzle-area"></div>
+        </div>
+        <div id="right-panel">
+            <div id="game-banner">Mapuzzle</div>
+            <div id="pieces-container"></div>
+            <div id="game-footer">Made by Nina and Papa</div>
+        </div>
+    </div>
+    
+    <div id="win-screen" class="hidden">
+        <div class="win-message">Puzzle Complete!</div>
+        <div id="confetti-container"></div>
+        <button id="play-again">Play Again</button>
+    </div>
+
+    <script src="confetti.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html> 
