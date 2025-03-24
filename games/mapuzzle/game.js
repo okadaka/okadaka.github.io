@@ -14,11 +14,20 @@ class PuzzleGame {
         this.currentPiece = null;
         this.dragOffset = { x: 0, y: 0 };
         
+        // Sound state
+        this.soundsUnlocked = false;
+        
         // DOM elements
         this.puzzleArea = document.getElementById('puzzle-area');
         this.piecesContainer = document.getElementById('pieces-container');
         this.winScreen = document.getElementById('win-screen');
         this.playAgainBtn = document.getElementById('play-again');
+        
+        // Check if DOM elements exist
+        if (!this.puzzleArea) console.error("Missing puzzle-area element!");
+        if (!this.piecesContainer) console.error("Missing pieces-container element!");
+        if (!this.winScreen) console.error("Missing win-screen element!");
+        if (!this.playAgainBtn) console.error("Missing play-again button!");
         
         // Sound configuration
         this.initSounds();
@@ -28,16 +37,22 @@ class PuzzleGame {
     }
     
     init() {
-        // Add this line at the beginning of the init method
-        this.previewElement = null;
+        // Log image loading status
+        console.log("Starting to load image:", this.imagePath);
         
-        // Load the image
         this.image.onload = () => {
+            console.log("Image loaded successfully!");
             this.createPuzzlePieces();
             this.setupInitialPieces();
             this.setupNextPieces();
             this.setupEventListeners();
         };
+        
+        this.image.onerror = () => {
+            console.error("Failed to load image:", this.imagePath);
+            alert("Could not load puzzle image. Please check the image path.");
+        };
+        
         this.image.src = this.imagePath;
         
         // Setup play again button
@@ -56,7 +71,6 @@ class PuzzleGame {
             'sounds/mixkit-interface-option-select-2573.wav',
             'sounds/mixkit-long-pop-2358.wav',
             'sounds/mixkit-message-pop-alert-2354.mp3'
-
         ];
         
         const wrongSounds = [
@@ -85,23 +99,45 @@ class PuzzleGame {
             'sounds/mixkit-ending-show-audience-clapping-478.wav'
         ];
         
-        // Create Howl objects for each sound type
-        this.snapSounds = snapSounds.map(src => new Howl({ src: [src], preload: true }));
-        this.wrongSounds = wrongSounds.map(src => new Howl({ src: [src], preload: true }));
-        this.winSounds = winSounds.map(src => new Howl({ src: [src], preload: true }));
-    }
-    
-    // Helper method to play a random sound from an array
-    playRandomSound(soundsArray) {
-        if (soundsArray.length === 0) return;
+        // Create a single Howl instance with all sounds for better mobile handling
+        this.allSounds = {
+            snap: snapSounds.map(src => new Howl({ 
+                src: [src], 
+                preload: true,
+                html5: true // This is important for iOS
+            })),
+            wrong: wrongSounds.map(src => new Howl({ 
+                src: [src], 
+                preload: true,
+                html5: true
+            })),
+            win: winSounds.map(src => new Howl({ 
+                src: [src], 
+                preload: true,
+                html5: true
+            }))
+        };
         
-        const randomIndex = Math.floor(Math.random() * soundsArray.length);
-        soundsArray[randomIndex].play();
+        // Store sound arrays directly for easy access
+        this.snapSounds = this.allSounds.snap;
+        this.wrongSounds = this.allSounds.wrong;
+        this.winSounds = this.allSounds.win;
     }
     
     createPuzzlePieces() {
+        console.log("Creating puzzle pieces...");
         const pieceWidth = this.image.width / this.gridSize;
         const pieceHeight = this.image.height / this.gridSize;
+        
+        console.log("Image dimensions:", this.image.width, "x", this.image.height);
+        console.log("Piece dimensions:", pieceWidth, "x", pieceHeight);
+        
+        // Determine if we're on iPad or other mobile device
+        const isIPad = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        
+        // Apply scaling factor for mobile devices
+        const scalingFactor = isIPad ? 0.85 : 1.0;
         
         for (let row = 0; row < this.gridSize; row++) {
             for (let col = 0; col < this.gridSize; col++) {
@@ -113,6 +149,7 @@ class PuzzleGame {
                     y: row * pieceHeight,
                     width: pieceWidth,
                     height: pieceHeight,
+                    scalingFactor: scalingFactor, // Store scaling factor for later use
                     placed: false,
                     element: null
                 };
@@ -240,10 +277,18 @@ class PuzzleGame {
     }
     
     placePiece(piece, isInitial = false) {
+        console.log("Placing piece:", piece.id, "Initial:", isInitial);
+        
         // Calculate the actual position in the puzzle area
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        
+        // Adjust scale based on device
+        const deviceAdjustment = /iPad|iPhone|iPod/.test(navigator.userAgent) ? 0.9 : 1.0;
+        
         const scale = Math.min(
-            this.puzzleArea.clientWidth / this.image.width,
-            this.puzzleArea.clientHeight / this.image.height
+            (this.puzzleArea.clientWidth / this.image.width) * deviceAdjustment,
+            (this.puzzleArea.clientHeight / this.image.height) * deviceAdjustment
         ) * 0.9; // 90% of available space
         
         const puzzleWidth = this.image.width * scale;
@@ -350,6 +395,23 @@ class PuzzleGame {
         // Events for the next pieces container
         this.piecesContainer.addEventListener('mousedown', this.handleNextPieceMouseDown.bind(this));
         this.piecesContainer.addEventListener('touchstart', this.handleNextPieceTouchStart.bind(this), { passive: false });
+        
+        // Prevent iOS Safari zoom on double tap
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        // Prevent document zooming and scrolling on iOS
+        document.addEventListener('touchmove', function(event) {
+            if (event.scale !== 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
     }
     
     handleMouseDown(e) {
@@ -597,6 +659,14 @@ class PuzzleGame {
         
         // Hide win screen
         this.winScreen.classList.add('hidden');
+    }
+    
+    // Helper method to play a random sound from an array
+    playRandomSound(soundsArray) {
+        if (soundsArray.length === 0) return;
+        
+        const randomIndex = Math.floor(Math.random() * soundsArray.length);
+        soundsArray[randomIndex].play();
     }
 }
 

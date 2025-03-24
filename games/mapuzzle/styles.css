@@ -9,13 +9,16 @@ body {
     background-color: #f0f0f0;
     overflow: hidden;
     touch-action: none;
+    width: 100vw;
     height: 100vh;
+    position: fixed;
 }
 
 #game-container {
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 #main-panel {
@@ -31,12 +34,13 @@ body {
     width: 100%;
     height: 100%;
     position: relative;
+    overflow: hidden;
 }
 
 #right-panel {
     width: 25%;
     height: 100%;
-    background-color: #f0f0f0;
+    background-color: #d8d8d8;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -177,4 +181,72 @@ body {
     z-index: 1001;
     opacity: 0.9;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+}
+
+@media only screen 
+and (min-device-width: 768px) 
+and (max-device-width: 1024px) {
+    #game-container {
+        width: 100vw;
+        height: 100vh;
+    }
+    
+    #main-panel {
+        width: 70%;
+    }
+    
+    #right-panel {
+        width: 30%;
+    }
+    
+    #game-banner {
+        font-size: 2rem;
+        padding: 15px 10px;
+    }
+    
+    .puzzle-piece, .next-piece {
+        transform-origin: center;
+        transform: scale(0.9);
+    }
+}
+
+@media only screen 
+and (max-device-width: 926px) 
+and (orientation: landscape) {
+    #game-banner {
+        font-size: 1.5rem;
+        padding: 10px 5px;
+    }
+    
+    #game-footer {
+        font-size: 0.9rem;
+        padding: 10px 5px;
+    }
+}
+
+/* Fix for iOS devices */
+@supports (-webkit-touch-callout: none) {
+    body {
+        /* Prevent scrolling/bouncing on iOS */
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* Ensure content fits within viewport */
+    #game-container {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100%;
+        max-height: 100%;
+    }
 } 
