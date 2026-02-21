@@ -7,20 +7,22 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="BBall Rec">
+    <meta name="theme-color" content="#000000">
     <title>Basketball Play Diagram</title>
 
     <!-- PWA Manifest -->
-    <!-- PWA Manifest handled by vite-plugin-pwa -->
+    <link rel="manifest" href="./manifest.json">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="./visuals/favicon.png">
-    <link rel="apple-touch-icon" href="./visuals/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./visuals/apple-touch-icon.png">
 
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="./assets/main-CeQ5rDkc.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/howler-BEAMOoOw.js">
-  <link rel="stylesheet" crossorigin href="./assets/main-DMCUlgI7.css">
+  <script type="module" crossorigin src="./assets/main-CGjliidu.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/howler-Czk3W7ES.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-BQd-CFmH.css">
 <link rel="manifest" href="./manifest.json"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
 
 <body>
@@ -48,6 +50,9 @@
             <!-- Court Canvas Container -->
             <div id="court-container">
                 <canvas id="court-canvas"></canvas>
+                <button id="btn-fullscreen" class="btn-fullscreen hidden" title="Toggle Fullscreen">
+                    <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M813.33-606.67v-126.66H686.67V-800h126.66q27%200%2046.84%2019.83Q880-760.33%20880-733.33v126.66h-66.67Zm-733.33%200v-126.66q0-27%2019.83-46.84Q119.67-800%20146.67-800h126.66v66.67H146.67v126.66H80ZM686.67-160v-66.67h126.66v-126.66H880v126.66q0%2027-19.83%2046.84Q840.33-160%20813.33-160H686.67Zm-540%200q-27%200-46.84-19.83Q80-199.67%2080-226.67v-126.66h66.67v126.66h126.66V-160H146.67Zm66.66-133.33v-373.34h533.34v373.34H213.33ZM280-360h400v-240H280v240Zm0%200v-240%20240Z'/%3e%3c/svg%3e" alt="Fullscreen">
+                </button>
             </div>
 
             <!-- Playback Slider Section -->
@@ -118,6 +123,10 @@
                         <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M153.3-73.3v-75.76h653.56v75.76H153.3Zm326.03-169.09L184.67-618.81h165.58v-268.05h258.33v268.05h166.25l-295.5%20376.42Zm0-123.57L609.78-531.8h-77.11v-279.14H426v279.14h-77.11l130.44%20165.84Zm0-165.84Z'/%3e%3c/svg%3e" class="icon" alt="Export">
                         <span class="label">Export</span>
                     </button>
+                    <button id="btn-info" class="btn" title="About / Info">
+                        <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M445.72-277.05h72.56V-520h-72.56v242.95Zm62.24-326.08q11.36-11.11%2011.36-27.54%200-17.17-11.3-28.58-11.3-11.4-28.01-11.4-16.88%200-28.11%2011.4-11.22%2011.41-11.22%2028.5%200%2016.53%2011.37%2027.63%2011.36%2011.11%2027.95%2011.11t27.96-11.12ZM480.2-73.3q-84.44%200-158.48-31.96-74.03-31.96-129.27-87.19-55.23-55.24-87.19-129.3Q73.3-395.82%2073.3-480.31q0-84.5%2031.96-158.58%2031.96-74.09%2087.17-129t129.28-86.94q74.08-32.03%20158.59-32.03t158.61%2032.02q74.11%2032.02%20129%2086.91%2054.9%2054.88%2086.92%20129.08%2032.03%2074.2%2032.03%20158.67%200%2084.46-32.03%20158.5-32.03%2074.03-86.94%20129.12t-129.08%2087.17Q564.64-73.3%20480.2-73.3Zm.13-75.76q138.05%200%20234.33-96.51%2096.28-96.52%2096.28-234.76%200-138.05-96.16-234.33-96.15-96.28-234.86-96.28-137.79%200-234.33%2096.16-96.53%2096.15-96.53%20234.86%200%20137.79%2096.51%20234.33%2096.52%2096.53%20234.76%2096.53ZM480-480Z'/%3e%3c/svg%3e" class="icon" alt="Info">
+                        <span class="label">Info</span>
+                    </button>
                     <div class="control-section control-auth">
                         <button id="btn-login" class="btn" title="Login with Google">
                             <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M227.04-264.95q58.84-41.85%20120.85-64.7%2062.02-22.85%20132.2-22.85%2070.18%200%20132.7%2023.09%2062.53%2023.09%20120.84%2064.54%2040.44-49.91%2058.88-102.74%2018.43-52.84%2018.43-112.39%200-139.76-95.58-235.35t-235.33-95.59q-139.75%200-235.36%2095.59-95.61%2095.59-95.61%20235.35%200%2059.46%2018.65%20112.26%2018.65%2052.79%2059.33%20102.79Zm252.84-179.88q-59.04%200-99.25-40.32-40.22-40.32-40.22-99.24%200-58.93%2040.34-99.24%2040.34-40.31%2099.37-40.31%2059.04%200%2099.25%2040.43%2040.22%2040.44%2040.22%2099.37%200%2058.92-40.34%2099.11-40.34%2040.2-99.37%2040.2Zm.33%20371.53q-83.9%200-158.08-31.99-74.17-31.98-129.51-87.32-55.34-55.33-87.33-129.37Q73.3-396.02%2073.3-480.2q0-84%2032.02-157.94t87.31-129.23q55.29-55.29%20129.33-87.39%2074.05-32.1%20158.24-32.1%2084%200%20157.94%2032.1t129.23%2087.39q55.29%2055.29%2087.39%20129.27%2032.1%2073.99%2032.1%20157.89%200%2083.9-32.1%20158.09-32.1%2074.2-87.39%20129.49-55.29%2055.29-129.27%2087.31Q564.11-73.3%20480.21-73.3Zm-.21-75.76q53.46%200%20102.85-15.31%2049.39-15.32%2096.39-50.85-47.32-33.27-96.69-50.47-49.36-17.19-102.55-17.19t-102.43%2017.19q-49.25%2017.2-96.57%2050.47%2047%2035.53%2096.27%2050.85%2049.27%2015.31%20102.73%2015.31Zm0-365.55q30.52%200%2050.13-19.52%2019.61-19.52%2019.61-50.14%200-30.61-19.61-50.26-19.61-19.64-50.13-19.64-30.52%200-50.13%2019.64-19.61%2019.65-19.61%2050.26%200%2030.62%2019.61%2050.14T480-514.61Zm0-69.74Zm.24%20368.46Z'/%3e%3c/svg%3e" class="icon" alt="Login">
@@ -158,6 +167,47 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Info Overlay -->
+            <div id="info-overlay" class="overlay hidden">
+                <div class="overlay-content overlay-compact">
+                    <div class="overlay-header">
+                        <div class="header-titles">
+                            <h2>Basketball Play Recorder</h2>
+                        </div>
+                        <button id="btn-close-info" class="btn-close">×</button>
+                    </div>
+                    <div class="overlay-body info-body">
+                        <div class="info-section">
+                            <h3>Instructions</h3>
+                            <ul>
+                                <li><strong>Move:</strong> Drag players on the court to record their movement.</li>
+                                <li><strong>Pass:</strong> Click on a player to pass the ball to them.</li>
+                                <li><strong>Defenders:</strong> Drag "D" from the toolbar to add defensive players.</li>
+                                <li><strong>Recording:</strong> Press Record, move players, then press Stop to save.
+                                </li>
+                                <li><strong>Narrate:</strong> Record bnew audio for the play - saved a as a new play.
+                                </li>
+                                <li><strong>Store:</strong> Log-in to Google to save in Google Drive. Otherwise,
+                                    recordings are temporarily saved locally in your browser. </li>
+                                <li><strong>Export:</strong> Make MP4 video of your play for sharing.</li>
+                                <li><strong>Privacy:</strong> We never send your recordings or audio to our servers.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="info-section">
+                            <h3>Legal</h3>
+                            <div class="legal-links">
+                                <a href="privacy.html" target="_blank" class="legal-link">Privacy Policy</a>
+                                <a href="tos.html" target="_blank" class="legal-link">Terms of Service</a>
+                            </div>
+                        </div>
+                        <div class="info-footer">
+                            <p>&copy; 2026 Anton Okmyanskiy. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Export Progress Modal -->
             <div id="export-modal" class="modal hidden">
                 <div class="modal-content">
@@ -192,12 +242,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="app-legal-footer"
-            style="position: absolute; bottom: 5px; right: 10px; font-size: 10px; color: rgba(255,255,255,0.3); z-index: 10;">
-            <a href="privacy.html" target="_blank"
-                style="color: inherit; text-decoration: none; margin-right: 10px;">Privacy</a>
-            <a href="tos.html" target="_blank" style="color: inherit; text-decoration: none;">Terms</a>
         </div>
     </div>
 
