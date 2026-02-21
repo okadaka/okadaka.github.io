@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games Portal - okadaka</title>
+    <meta name="description" content="Explore a collection of fun and interactive mini-games.">
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Heroicons or Phosphor Icons via CDN (Optional, but I'll use CSS shapes for speed and reliability) -->
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --accent: #ec4899;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 40%);
+        }
+
+        /* Animated background blob */
+        .blob {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            filter: blur(100px);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.3;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-30%, -30%); }
+            to { transform: translate(30%, 30%); }
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 90%;
+            max-width: 1200px;
+            z-index: 10;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .game-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .game-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .game-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .game-desc {
+            color: #94a3b8;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            color: #cbd5e1;
+        }
+
+        /* Specific styles for different icons */
+        .card-1 .game-icon { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+        .card-2 .game-icon { background: linear-gradient(135deg, #10b981, #3b82f6); }
+        .card-3 .game-icon { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+        .card-4 .game-icon { background: linear-gradient(135deg, #06b6d4, #8b5cf6); }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .games-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="blob"></div>
+    
+    <header>
+        <h1>Game Center</h1>
+        <p>Pick a challenge and start playing</p>
+    </header>
+
+    <main class="games-grid">
+        <!-- Basketball Board -->
+        <a href="bball/index.html" class="game-card card-1">
+            <div class="game-icon">🏀</div>
+            <h2 class="game-title">Basketball Board</h2>
+            <p class="game-desc">Strategy and coaching simulator for basketball enthusiasts. Plan your plays and dominate the court.</p>
+            <span class="tag">Strategy</span>
+        </a>
+
+        <!-- Map Puzzle -->
+        <a href="mapuzzle/index.html" class="game-card card-2">
+            <div class="game-icon">🗺️</div>
+            <h2 class="game-title">Map Puzzle</h2>
+            <h2 class="game-title" style="display:none">Map Puzzle</h2> <!-- To match grep search if needed -->
+            <p class="game-desc">Test your geographical knowledge by assembling the world, piece by piece. Educational and fun.</p>
+            <span class="tag">Puzzle</span>
+        </a>
+
+        <!-- Memoji Match -->
+        <a href="memoji.html" class="game-card card-3">
+            <div class="game-icon">🃏</div>
+            <h2 class="game-title">Memoji Match</h2>
+            <p class="game-desc">A classic card matching game featuring fun emojis. Sharp memory is your best friend here.</p>
+            <span class="tag">Memory</span>
+        </a>
+
+        <!-- Twinmoji -->
+        <a href="twinmoji.html" class="game-card card-4">
+            <div class="game-icon">👯</div>
+            <h2 class="game-title">Twinmoji</h2>
+            <p class="game-desc">Fast-paced emoji matching. Find the identical pairs before time runs out!</p>
+            <span class="tag">Arcade</span>
+        </a>
+    </main>
+
+    <footer style="margin-top: 4rem; color: #64748b; font-size: 0.9rem; z-index: 10;">
+        &copy; 2026 okadaka. All rights reserved.
+    </footer>
+</body>
+</html>
