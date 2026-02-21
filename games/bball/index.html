@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Basketball Play Diagram</title>
+
+    <!-- PWA Manifest -->
+    <!-- PWA Manifest handled by vite-plugin-pwa -->
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./visuals/favicon.png">
+    <link rel="apple-touch-icon" href="./visuals/favicon.png">
+
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="./assets/main-CeQ5rDkc.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/howler-BEAMOoOw.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-DMCUlgI7.css">
+<link rel="manifest" href="./manifest.json"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
+
+<body>
+    <!-- Pre-splash: dunk gif and tap hint -->
+    <div id="pre-splash" class="pre-splash-visible">
+        <div class="pre-splash-content">
+            <img src="./assets/dunk-aEFbGiFw.gif" alt="Dunking" id="pre-splash-gif">
+            <div id="pre-splash-tap-hint">Tap to Start</div>
+        </div>
+    </div>
+
+    <!-- Startup splash: ball emerges, explosion, then "BASKETBALL PLAY RECORDER" (only starts when sound loaded) -->
+    <div id="splash-intro" class="splash-intro-hidden" aria-hidden="true">
+        <canvas id="splash-intro-canvas"></canvas>
+        <div id="splash-intro-title" class="splash-intro-title">BASKETBALL PLAY RECORDER</div>
+    </div>
+
+    <div id="app-viewport">
+        <div id="app">
+            <!-- Header Bar -->
+            <div id="header-bar">
+                <h1 id="toolbar-filename" class="toolbar-filename">Basketball Play Recorder</h1>
+            </div>
+
+            <!-- Court Canvas Container -->
+            <div id="court-container">
+                <canvas id="court-canvas"></canvas>
+            </div>
+
+            <!-- Playback Slider Section -->
+            <div id="playback-section">
+                <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='24px'%20viewBox='0%20-960%20960%20960'%20width='24px'%20fill='%23FFFFFF'%3e%3cpath%20d='M339.5-108.5q-65.5-28.5-114-77t-77-114Q120-365%20120-440h80q0%20117%2081.5%20198.5T480-160q117%200%20198.5-81.5T760-440q0-117-81.5-198.5T480-720h-6l62%2062-56%2058-160-160%20160-160%2056%2058-62%2062h6q75%200%20140.5%2028.5t114%2077q48.5%2048.5%2077%20114T840-440q0%2075-28.5%20140.5t-77%20114q-48.5%2048.5-114%2077T480-80q-75%200-140.5-28.5Z'/%3e%3c/svg%3e" id="playback-icon" class="icon" alt="Replay">
+                <span id="playback-current-time">00:00</span>
+                <input type="range" id="playback-slider" min="0" max="100" value="0">
+                <span id="playback-total-time">00:00</span>
+            </div>
+
+            <!-- High-res export rendering: visible but unobtrusive for rAF/captureStream -->
+            <div id="export-container"
+                style="position: fixed; top: 0; left: 0; width: 1280px; height: 720px; opacity: 0.1; pointer-events: none; z-index: -1000; overflow: hidden; background: #000;">
+                <canvas id="export-canvas"></canvas>
+            </div>
+
+            <!-- Control Bar -->
+            <div id="control-bar">
+                <div class="control-section control-left">
+                    <button id="btn-new" class="btn btn-icon" title="New Play">
+                        <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M447.07-278.41h69.86v-164h164.66v-69.85H516.93v-169.33h-69.86v169.33H278.41v69.85h168.66v164ZM480.2-73.3q-84.44%200-158.48-31.96-74.03-31.96-129.27-87.19-55.23-55.24-87.19-129.3Q73.3-395.82%2073.3-480.31q0-84.5%2031.96-158.58%2031.96-74.09%2087.17-129t129.28-86.94q74.08-32.03%20158.59-32.03t158.61%2032.02q74.11%2032.02%20129%2086.91%2054.9%2054.88%2086.92%20129.08%2032.03%2074.2%2032.03%20158.67%200%2084.46-32.03%20158.5-32.03%2074.03-86.94%20129.12t-129.08%2087.17Q564.64-73.3%20480.2-73.3Zm.13-75.76q138.05%200%20234.33-96.51%2096.28-96.52%2096.28-234.76%200-138.05-96.16-234.33-96.15-96.28-234.86-96.28-137.79%200-234.33%2096.16-96.53%2096.15-96.53%20234.86%200%20137.79%2096.51%20234.33%2096.52%2096.53%20234.76%2096.53ZM480-480Z'/%3e%3c/svg%3e" class="icon" alt="New">
+                        <span class="label">New</span>
+                    </button>
+                    <!-- Offense Drag Source -->
+                    <div id="offense-drag-source" title="Drag to add Offensive Player"
+                        style="cursor: grab; touch-action: none; margin-left: 15px; padding: 0; background: transparent; border: none; outline: none; -webkit-tap-highlight-color: transparent; display: flex !important;">
+                        <div
+                            style="width: 60px; height: 60px; border-radius: 50%; background: #2196f3; border: 3px solid white; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 24px; font-family: Arial; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                            O</div>
+                    </div>
+                    <!-- Defender Drag Source -->
+                    <div id="defender-drag-source" title="Drag to add Defender"
+                        style="cursor: grab; touch-action: none; margin-left: 15px; padding: 0; background: transparent; border: none; outline: none; -webkit-tap-highlight-color: transparent;">
+                        <div
+                            style="width: 60px; height: 60px; border-radius: 50%; background: #4caf50; border: 3px solid white; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; font-size: 24px; font-family: Arial; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                            D</div>
+                    </div>
+                </div>
+
+                <!-- Ball controls removed -->
+
+                <div class="control-section control-right">
+                    <button id="btn-record" class="btn btn-record" title="Record">
+                        <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M478.67-478.67Zm1.31%20285.37q-119.42%200-203.05-83.62-83.63-83.61-83.63-203.03%200-119.43%2083.62-203.17%2083.61-83.74%20203.03-83.74%20119.43%200%20203.17%2083.73%2083.74%2083.72%2083.74%20203.15%200%20119.42-83.73%20203.05-83.72%2083.63-203.15%2083.63Zm.02-75.76q88.12%200%20149.53-61.4%2061.41-61.41%2061.41-149.54%200-88.12-61.4-149.53-61.41-61.41-149.54-61.41-88.12%200-149.53%2061.4-61.41%2061.41-61.41%20149.54%200%2088.12%2061.4%20149.53%2061.41%2061.41%20149.54%2061.41Z'/%3e%3c/svg%3e" class="icon" alt="Record">
+                        <span class="label">Record</span>
+                    </button>
+                    <button id="btn-stop" class="btn btn-stop hidden" title="Stop">
+                        <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M309.06-650.94v341.88-341.88ZM233.3-233.3v-493.56h493.56v493.56H233.3Zm75.76-75.76h341.88v-341.88H309.06v341.88Z'/%3e%3c/svg%3e" class="icon" alt="Stop">
+                        <span class="label">Stop</span>
+                    </button>
+                    <button id="btn-play" class="btn" title="Play">
+                        <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M313.3-189.8v-584.4L772.51-482%20313.3-189.8ZM389.06-482Zm0%20154.12L631.46-482l-242.4-154.12v308.24Z'/%3e%3c/svg%3e" class="icon" alt="Play">
+                        <span class="label">Play</span>
+                    </button>
+                    <button id="btn-mute" class="btn" title="Mute">
+                        <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M808.07-49.62%20679.26-178.75q-26.2%2017.87-56.29%2030.85-30.08%2012.98-62.61%2020.33v-72.1q18.24-5.77%2035.68-12.47%2017.44-6.69%2032.83-17.56L480.36-379.36v235.54L271.03-353.3H107.04v-253.56h146.99L44.64-817.52l49.24-49.25L857.56-99.78l-49.49%2050.16Zm-21.56-236.23-50.15-50.63q19-32.76%2028.16-69.25%209.17-36.5%209.17-75.27%200-100.14-58.57-178.91-58.58-78.77-154.76-102.42v-72.1q125.11%2028.24%20204.15%20126.78%2079.03%2098.53%2079.03%20226.65%200%2052.46-14.52%20101.94-14.53%2049.48-42.51%2093.21ZM652.75-420.17l-92.39-92.87v-131.35q47.79%2022.48%2075.49%2067%2027.69%2044.51%2027.69%2097.39%200%2015.56-2.74%2030.58-2.73%2015.01-8.05%2029.25ZM480.36-593.59%20369.5-705.33l110.86-110.85v222.59Zm-75.92%20265.77v-127.59l-75.22-75.53H182.8v101.88h120.4l101.24%20101.24Zm-37.61-165.27Z'/%3e%3c/svg%3e" class="icon" alt="Mute">
+                        <span class="label">Mute</span>
+                    </button>
+                    <button id="btn-narrate" class="btn" title="Narrate">
+                        <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M480-406.25q-48.52%200-81.67-34.46-33.16-34.46-33.16-83.7v-245.97q0-47.44%2033.5-80.8%2033.49-33.36%2081.34-33.36%2047.84%200%2081.41%2033.36%2033.57%2033.36%2033.57%2080.8v245.97q0%2049.24-33.24%2083.7-33.23%2034.46-81.75%2034.46Zm0-238.93ZM443.72-107.8v-132.47q-108.92-12.48-181.5-93.55t-72.58-190.59h72.8q0%2090.01%2063.61%20152.12t153.87%2062.11q90.25%200%20153.94-62.14%2063.7-62.15%2063.7-152.09h72.8q0%20109.58-72.58%20190.62t-181.5%2093.51v132.48h-72.56Zm36.3-374.2q16.99%200%2028.02-12.38%2011.03-12.37%2011.03-30.03v-245.95q0-16.21-11.3-27.32T480-808.79q-16.47%200-27.77%2011.11t-11.3%2027.32v245.95q0%2017.66%2011.04%2030.03Q463.02-482%20480.02-482Z'/%3e%3c/svg%3e" class="icon" alt="Narrate">
+                        <span class="label">Narrate</span>
+                    </button>
+                    <button id="btn-catalogue" class="btn" title="Catalogue">
+                        <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M144.33-169.72%2090.04-564.41q-4.14-30.42%2014.92-55.16%2019.07-24.73%2049.72-28.63l65.99%20468.69%20411.78-50.46h139.5q-1.07%2025.76-17.95%2044.13t-43.17%2021.69l-482.14%2059.74q-30.72%203.9-55.17-15.04-24.44-18.95-29.19-50.27Zm156.18-127.05q-31%200-53.38-22.38-22.38-22.38-22.38-53.37v-398.42q0-31.06%2022.38-53.49%2022.38-22.43%2053.38-22.43h519.68q30.82%200%2053.29%2022.43%2022.46%2022.43%2022.46%2053.49v398.42q0%2030.99-22.46%2053.37-22.47%2022.38-53.29%2022.38H300.51Zm0-75.75h519.68v-398.42H300.51v398.42Zm0%200v-398.42%20398.42Zm-79.84%20193.01Zm179.6-425.82h320v-69.62h-320v69.62Zm0%20136.28H599.6v-69.62H400.27v69.62Z'/%3e%3c/svg%3e" class="icon" alt="Catalogue">
+                        <span class="label">Catalogue</span>
+                    </button>
+                    <button id="btn-export" class="btn" title="Export">
+                        <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M153.3-73.3v-75.76h653.56v75.76H153.3Zm326.03-169.09L184.67-618.81h165.58v-268.05h258.33v268.05h166.25l-295.5%20376.42Zm0-123.57L609.78-531.8h-77.11v-279.14H426v279.14h-77.11l130.44%20165.84Zm0-165.84Z'/%3e%3c/svg%3e" class="icon" alt="Export">
+                        <span class="label">Export</span>
+                    </button>
+                    <div class="control-section control-auth">
+                        <button id="btn-login" class="btn" title="Login with Google">
+                            <img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20height='40px'%20viewBox='0%20-960%20960%20960'%20width='40px'%20fill='%23FFFFFF'%3e%3cpath%20d='M227.04-264.95q58.84-41.85%20120.85-64.7%2062.02-22.85%20132.2-22.85%2070.18%200%20132.7%2023.09%2062.53%2023.09%20120.84%2064.54%2040.44-49.91%2058.88-102.74%2018.43-52.84%2018.43-112.39%200-139.76-95.58-235.35t-235.33-95.59q-139.75%200-235.36%2095.59-95.61%2095.59-95.61%20235.35%200%2059.46%2018.65%20112.26%2018.65%2052.79%2059.33%20102.79Zm252.84-179.88q-59.04%200-99.25-40.32-40.22-40.32-40.22-99.24%200-58.93%2040.34-99.24%2040.34-40.31%2099.37-40.31%2059.04%200%2099.25%2040.43%2040.22%2040.44%2040.22%2099.37%200%2058.92-40.34%2099.11-40.34%2040.2-99.37%2040.2Zm.33%20371.53q-83.9%200-158.08-31.99-74.17-31.98-129.51-87.32-55.34-55.33-87.33-129.37Q73.3-396.02%2073.3-480.2q0-84%2032.02-157.94t87.31-129.23q55.29-55.29%20129.33-87.39%2074.05-32.1%20158.24-32.1%2084%200%20157.94%2032.1t129.23%2087.39q55.29%2055.29%2087.39%20129.27%2032.1%2073.99%2032.1%20157.89%200%2083.9-32.1%20158.09-32.1%2074.2-87.39%20129.49-55.29%2055.29-129.27%2087.31Q564.11-73.3%20480.21-73.3Zm-.21-75.76q53.46%200%20102.85-15.31%2049.39-15.32%2096.39-50.85-47.32-33.27-96.69-50.47-49.36-17.19-102.55-17.19t-102.43%2017.19q-49.25%2017.2-96.57%2050.47%2047%2035.53%2096.27%2050.85%2049.27%2015.31%20102.73%2015.31Zm0-365.55q30.52%200%2050.13-19.52%2019.61-19.52%2019.61-50.14%200-30.61-19.61-50.26-19.61-19.64-50.13-19.64-30.52%200-50.13%2019.64-19.61%2019.65-19.61%2050.26%200%2030.62%2019.61%2050.14T480-514.61Zm0-69.74Zm.24%20368.46Z'/%3e%3c/svg%3e" class="icon" alt="Login">
+                            <span class="label">Login</span>
+                        </button>
+                        <div id="user-profile" class="hidden">
+                            <img id="user-photo" src="" alt="Profile" referrerpolicy="no-referrer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Count Selector Modal -->
+            <div id="player-count-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>Select Number of Players</h2>
+                    <div class="player-count-buttons">
+                        <button class="btn-player-count" data-count="1">1</button>
+                        <button class="btn-player-count" data-count="2">2</button>
+                        <button class="btn-player-count" data-count="3">3</button>
+                        <button class="btn-player-count" data-count="4">4</button>
+                        <button class="btn-player-count" data-count="5">5</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Catalogue Overlay -->
+            <div id="catalogue-overlay" class="overlay hidden">
+                <div class="overlay-content">
+                    <div class="overlay-header">
+                        <div class="header-titles">
+                            <h2>Catalogue</h2>
+                        </div>
+                        <button id="btn-close-catalogue" class="btn-close">×</button>
+                    </div>
+                    <div class="catalogue-body">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+            <!-- Export Progress Modal -->
+            <div id="export-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>Recording Playback...</h2>
+                    <p style="text-align: center; color: #ccc; margin-bottom: 10px;">The app is replaying your
+                        sequence
+                        to
+                        capture the video.</p>
+                    <div class="progress-container" style="margin: 20px 0;">
+                        <progress id="export-progress" value="0" max="100"
+                            style="width: 100%; height: 20px;"></progress>
+                    </div>
+                    <div style="text-align: center;">
+                        <button id="btn-stop-export" class="btn btn-stop" style="display: inline-block;">
+                            <span class="icon">■</span>
+                            <span class="label">Stop</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Modal -->
+            <div id="confirm-modal" class="modal hidden">
+                <div class="modal-content" style="max-width: 400px; text-align: center;">
+                    <h2 id="confirm-title" style="color: #ff6b35; margin-bottom: 16px;">Confirm</h2>
+                    <p id="confirm-message" style="margin-bottom: 24px; color: #ddd; font-size: 16px;">Are you sure?
+                    </p>
+                    <div style="display: flex; gap: 16px; justify-content: center;">
+                        <button id="btn-confirm-cancel" class="btn" style="flex: 1; max-width: 120px;">Cancel</button>
+                        <button id="btn-confirm-yes" class="btn btn-icon"
+                            style="flex: 1; max-width: 120px; background: #ff4444;">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="app-legal-footer"
+            style="position: absolute; bottom: 5px; right: 10px; font-size: 10px; color: rgba(255,255,255,0.3); z-index: 10;">
+            <a href="privacy.html" target="_blank"
+                style="color: inherit; text-decoration: none; margin-right: 10px;">Privacy</a>
+            <a href="tos.html" target="_blank" style="color: inherit; text-decoration: none;">Terms</a>
+        </div>
+    </div>
+
+    <!-- Scripts: Howler.js for reliable cross-browser/Android/iOS audio -->
+    <!-- Scripts: Howler.js via npm import in main.js -->
+    <script src="https://accounts.google.com/gsi/client"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+
+</body>
+
+</html>
