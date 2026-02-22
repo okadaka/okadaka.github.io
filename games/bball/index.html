@@ -20,9 +20,9 @@
 
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="./assets/main-BVDABy4i.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/howler-CL1YC-DI.js">
-  <link rel="stylesheet" crossorigin href="./assets/main-fjKfH9Vn.css">
+  <script type="module" crossorigin src="./assets/main-BIXJb3gF.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/howler-Dfn1JApw.js">
+  <link rel="stylesheet" crossorigin href="./assets/main-DM_ffkZ9.css">
 <link rel="manifest" href="./manifest.json"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
 
 <body>
@@ -239,6 +239,22 @@
                     </div>
                 </div>
             </div>
+            <!-- Legal Overlay (PWA Safe) -->
+            <div id="legal-overlay" class="overlay hidden">
+                <div class="overlay-content overlay-compact">
+                    <div class="overlay-header">
+                        <div class="header-titles">
+                            <h2 id="legal-overlay-title">Legal</h2>
+                        </div>
+                        <button id="btn-close-legal" class="btn-close">×</button>
+                    </div>
+                    <div id="legal-overlay-body" class="overlay-body legal-overlay-body"
+                        style="padding: 20px; overflow-y: auto;">
+                        <!-- Fetched content will be injected here -->
+                    </div>
+                </div>
+            </div>
+
             <!-- Mic Waiting Overlay -->
             <div id="mic-waiting-overlay" class="hidden">
                 <div class="mic-waiting-box">
