@@ -69,7 +69,7 @@
         font-weight: 600;
         letter-spacing: -0.01em;
       }
-      .brand img { width: 1.75rem; height: 1.75rem; border-radius: 0.4rem; }
+      .brand svg { width: 1.75rem; height: 1.75rem; border-radius: 0.4rem; }
       .eyebrow {
         margin: 2.5rem 0 0.5rem;
         color: var(--terracotta);
@@ -110,7 +110,10 @@
   <body>
     <div class="shell">
       <a class="brand" href="./">
-        <img src="/branding/factote-mark.svg" alt="" width="28" height="28" />
+        <svg viewBox="0 0 1024 1024" width="28" height="28" aria-hidden="true" focusable="false">
+          <rect width="1024" height="1024" rx="220" fill="#FE4401" />
+          <path d="M348 252h424v128H492v116h248v126H492v262H348V252Z" fill="#FFFFFF" />
+        </svg>
         Factote
       </a>
 
