@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="application-name" content="ACB Stock Tracker" />
+  <meta name="apple-mobile-web-app-title" content="ACB Stock Tracker" />
+  <meta name="description" content="Track Adjusted Cost Base for Canadian tax reporting across every brokerage account. Local-only, open XLSX files, password-protected archives." />
+  <title>ACB Stock Tracker — Adjusted Cost Base for Canadian investors</title>
+  <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,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" />
+  <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAFWElEQVR42s2X7U+TZxTG/ROYCBRBREDFiTrxhTlm2BDcRlsplIICVRkvhiCiTodonPc0MX7Zsrgv27JpYrItM9kUlDelUiBFUCLokC1sM5NtbnGLVQdCecm1+3rWPoXaNibwQZJfcu77Oed3HdqU0FmznsefdUf/DZAY1h0bFDMCXdL5TOEvv/9YSOwSzDB0Cr/ha488PJ1w5CFIfOU9LCzoQrT56rSggy6Xlxlew9ccfiAkIFH57dBoa7CoqAdLd/ZPCzrootPlZ9aU8FUH/w5YfegfuwQL8mxYkGsDa1/oD9lQcugUKg8eU2DNO38zdNLtPNuZqS4QX3XfsKrqPpbvuYuQtGqw9iSx6he8W3UULZ9swJ/VazDYuRkTfTsUWPOOz9jDXm8OupnBmpnqAisr/xIS+TJ1IGZ7F1hPxnigFpaTSRi06THRfwDjP+zCeHcmxjuT/oe1vOMz9rCXM54eupnhPLvfhpf23xMSzN/cisUlvWDtorDyUwycXYHxvp0Y/74QYx2vquQVZClMvmMPeznD2ckuupnhPLsXWPHO70KCiJwWLCq+BdYkY381Br5Zjomf3sNY5waMtb8yBV1OtoLnPXs5w1k6XD66meE8uxdYtmdASBCRbcXCwptgvXbvbTR9JH+j3lKMdryOUVvCU+hyTArennGGs3TQRSfdzGDNTHWBuIpfhQTzTM2IebsbrPfuO4zH1lSM9Zgx2rbGK7rsLAVfzzlLB1100s0M1sxUF1hafkdIEJ51BdHbb4B188eJGLtdAUdrvE9cC/jroYMuOulmBmtmqgssKftZSBButCBqWxdSdtXjj7NLMHazEA7rCp+s12cr+Ouhgy466WYGs5ipLhBb2i8kCMtswgLzdWytOIlH1jQ42pMx0rzMK7lbDZgdv02Bta8+Ouiik25mMIuZ6gKLd/woJJibcRmR+Z3YvbsKo9dNGLG8KOXp0Jkyp7BeZ1LDXfDOs4+zdNBFJ93MYBYz1QUWFfcJCeYaLiEytwMVFQfguGbEcFMscs2boM3KmIKvBTz7OEsHXXTSzQxmMVNdIKawV0gQmt6I+VvakV/2IR5ZUjHSmojhSwu9kmvWu98CWfvqo4MuOulmBrOYqS4QXXBLSKDZ1CD/UNiQVHwOv30ZCUdXHp40RvtkvTZLwV8PHXTRSTczmMVMdYGobT1CAo2+HvOy28Da8sEqOLqL8KQh0idaY7qCvx466KKTbmawZqa6QKT5hpAgRFcnP6etYF1etg/2utUYaddhqC7CK64FfD3nLB100Uk3M1gzU11gfl6XkCBYW4swoxWsY81WNJxYiZFOk3wpF2OoNuwptMZNCt6ecYazdNBFJ93MYM1MdYGILdeEBMFpF+XHpBmsSUrBKdz5IhSOnjIM1cdg6IJmCtpMvYLnPXs5w1k6XD66meE8uxcIz+kQEgS9dQGhBgtYu8gpOo47n2swfDUTw20bMVgTrLIl902FyXfsYS9nODvZRTcznGf3AmEmm5DIhxflS1QH1pNJ3voZGo4vw4Ma+dftWj6G2w0YaozD4PlABda84zP2sJcznh66meE8uxeYa2wzSKAxXMELr30N1p5EmxpQWrILl0/E4e6pOXhQm4An1mQF1rzjM/aw15uDbmY4z+5/yUIzWwM0GS12CQJTzyFw43mw9sXazWeQtf0oSovLFVjzzt8MnXQ7z3ZmTvnPOCS9WUhAZqd8h4CkrzDnjQsISqufFnTQRafLzyyv3w2C9ZbTEpAgbaMcOofZG76dHtJBl8vLDL/fjoJ0TWKO9rJdghnGTvczfT8MTLsUIDFIxAxBV8Bz+U38PzpvDyOlkvl1AAAAAElFTkSuQmCC" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkFDQiB2YXVsdCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJvZHkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjM2I4NmY3Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzExNDZiNiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZG9vciIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmQ0NTIiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjBhNTAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iNTgiIGhlaWdodD0iNTgiIHJ4PSIxMyIgZmlsbD0idXJsKCNib2R5KSIvPgogIDxyZWN0IHg9IjciIHk9IjciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgcng9IjEwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwZTNhOWUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMjEiIGZpbGw9InVybCgjZG9vcikiIHN0cm9rZT0iI2I5NzkxYSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICA8Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIxOC42IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmY2ZDYiIHN0cm9rZS13aWR0aD0iMS4xIiBvcGFjaXR5PSIwLjc1Ii8+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iNC42IiBmaWxsPSIjMTIzMjVmIi8+CiAgPGcgc3Ryb2tlPSIjMTIzMjVmIiBzdHJva2Utd2lkdGg9IjMuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj4KICAgIDxsaW5lIHgxPSIzMiIgeTE9IjMyIiB4Mj0iMzIiIHkyPSIxNy41Ii8+CiAgICA8bGluZSB4MT0iMzIiIHkxPSIzMiIgeDI9IjMyIiB5Mj0iNDYuNSIvPgogICAgPGxpbmUgeDE9IjMyIiB5MT0iMzIiIHgyPSIxNy41IiB5Mj0iMzIiLz4KICAgIDxsaW5lIHgxPSIzMiIgeTE9IjMyIiB4Mj0iNDYuNSIgeTI9IjMyIi8+CiAgPC9nPgogIDxjaXJjbGUgY3g9IjQ5LjUiIGN5PSIxNC41IiByPSIxLjciIGZpbGw9IiNmZmZmZmYiLz4KPC9zdmc+Cg==" />
+  <link rel="apple-touch-icon" href="data:image/png;base64,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" />
+  <style>
+:root{--bg: #f5f7fa;--panel: #ffffff;--ink: #1f2933;--muted: #64748b;--border: #d7dde5;--accent: #1f6feb;--accent-strong: #1557b0;--accent-soft: #eaf1f9;--accent-soft-border: #c8d6e6;--positive: #087f5b;--radius: 10px;--shadow: 0 18px 44px rgba(15, 23, 42, .09);--max: 1160px;--font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:var(--font);color:var(--ink);background:linear-gradient(180deg,#f8fafc 0,var(--bg) 420px);line-height:1.5;-webkit-font-smoothing:antialiased}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}img{display:block;max-width:100%}.site-header{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:1.25rem;max-width:var(--max);margin:0 auto;padding:.85rem 1.5rem;background:#fffffff0;border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}.brand{display:flex;align-items:center;gap:.7rem;min-width:0;color:var(--ink)}.brand:hover{text-decoration:none}.brand img{width:34px;height:34px;border-radius:8px;flex:0 0 auto}.brand span{display:flex;flex-direction:column;min-width:0}.brand strong{font-size:.98rem;font-weight:700;letter-spacing:-.01em}.brand small{color:var(--muted);font-size:.72rem;white-space:nowrap}.brand--small img{width:26px;height:26px}.site-nav{display:flex;align-items:center;gap:1.25rem;margin-left:auto}.site-nav a{color:var(--muted);font-size:.84rem;font-weight:600}.site-nav a:hover{color:var(--ink);text-decoration:none}.button{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;border:1px solid transparent;border-radius:8px;padding:.62rem 1rem;font:inherit;font-size:.9rem;font-weight:650;line-height:1.2;cursor:pointer;transition:background-color .15s ease,border-color .15s ease,color .15s ease}.button:hover{text-decoration:none}.button--primary{background:var(--accent);color:#fff}.button--primary:hover{background:var(--accent-strong)}.button--ghost{background:transparent;color:var(--ink);border-color:var(--border)}.button--ghost:hover{background:#f8fafc;border-color:#b9c4d1}.button--compact{padding:.52rem .85rem;font-size:.84rem}.button--large{padding:.82rem 1.2rem;font-size:.96rem}.button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.hero{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);align-items:center;gap:3.25rem;max-width:var(--max);margin:0 auto;padding:4.5rem 1.5rem 4rem}.eyebrow{margin:0 0 .7rem;color:var(--accent);font-size:.72rem;font-weight:750;letter-spacing:.11em;text-transform:uppercase}.hero h1{margin:0;max-width:12ch;font-size:clamp(2.7rem,5.2vw,4.5rem);font-weight:760;letter-spacing:-.045em;line-height:1.02}.hero__lede{max-width:61ch;margin:1.35rem 0 0;color:var(--muted);font-size:1.04rem;line-height:1.72}.hero__actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.65rem}.trust-list{display:flex;flex-wrap:wrap;gap:.45rem 1.25rem;margin:1.55rem 0 0;padding:0;list-style:none;color:var(--muted);font-size:.8rem;font-weight:600}.trust-list li:before{content:"\2713";margin-right:.35rem;color:var(--accent);font-weight:800}.hero__visual{position:relative;min-width:0;padding:1.25rem 0 1.25rem 1rem}.app-mock{position:relative;overflow:hidden;background:var(--panel);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow)}.app-mock__bar{display:flex;align-items:center;gap:.65rem;height:34px;padding:0 .8rem;background:#f8fafc;border-bottom:1px solid var(--border);color:var(--muted);font-size:.68rem;font-weight:600}.app-mock__dots{display:flex;gap:4px}.app-mock__dots i{width:7px;height:7px;border-radius:50%;background:#cbd5e1}.app-mock__dots i:first-child{background:#fda4af}.app-mock__dots i:nth-child(2){background:#fcd34d}.app-mock__dots i:nth-child(3){background:#86efac}.app-mock__body{display:grid;grid-template-columns:128px minmax(0,1fr);min-height:286px}.app-mock__side{display:flex;flex-direction:column;gap:.2rem;padding:.85rem .55rem;background:#fbfcfe;border-right:1px solid var(--border)}.app-mock__side span{padding:.38rem .5rem;border-radius:6px;color:var(--muted);font-size:.67rem;font-weight:600;white-space:nowrap}.app-mock__side .is-active{background:var(--accent);color:#fff}.app-mock__main{min-width:0;padding:.95rem}.app-mock__heading{display:flex;align-items:flex-start;justify-content:space-between;gap:.5rem;margin-bottom:.7rem}.app-mock__heading strong{display:block;font-size:.88rem;letter-spacing:-.01em}.app-mock__heading small{display:block;color:var(--muted);font-size:.66rem}.mock-pill{flex:0 0 auto;padding:.2rem .45rem;border:1px solid var(--border);border-radius:999px;background:#f8fafc;color:var(--muted);font-size:.6rem;font-weight:650}.mock-table{border:1px solid var(--border);border-radius:7px;overflow:hidden;font-size:.64rem}.mock-row{display:grid;grid-template-columns:1.05fr .5fr 1.2fr 1fr .95fr;gap:.3rem;padding:.48rem .55rem;border-bottom:1px solid #edf1f5;align-items:center}.mock-row:last-child{border-bottom:0}.mock-row--head{background:#f8fafc;color:var(--muted);font-size:.57rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.mock-row span:not(:first-child){text-align:right}.is-positive{color:var(--positive);font-weight:650}.mock-strip{display:flex;justify-content:space-between;gap:.5rem;margin-top:.65rem;padding-top:.6rem;border-top:1px solid var(--border);color:var(--muted);font-size:.62rem;font-weight:600}.mock-float{position:absolute;display:flex;flex-direction:column;gap:.1rem;padding:.62rem .75rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;box-shadow:0 10px 24px #0f172a14}.mock-float span{color:var(--muted);font-size:.58rem;font-weight:650;text-transform:uppercase;letter-spacing:.06em}.mock-float strong{font-size:.9rem}.mock-float--acb{top:.2rem;right:-.4rem}.mock-float--privacy{bottom:.1rem;left:-.35rem}.section{max-width:var(--max);margin:0 auto;padding:4.5rem 1.5rem;scroll-margin-top:80px}.section__head{max-width:780px;margin-bottom:2rem}.section__head h2,.start-copy h2{margin:0;font-size:clamp(1.9rem,3.3vw,2.65rem);font-weight:740;letter-spacing:-.035em;line-height:1.1}.section__head p,.start-copy>p{max-width:76ch;margin:.9rem 0 0;color:var(--muted);font-size:.98rem;line-height:1.7}.three-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.plain-card,.feature-card{display:flex;flex-direction:column;min-width:0;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}.plain-card h3,.feature-card h3,.report-list h3,.data-card h3{margin:0 0 .45rem;font-size:.98rem;font-weight:680;letter-spacing:-.01em}.plain-card p,.feature-card p,.report-list p,.data-card p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.6}.feature-card p+p,.data-card p+p{margin-top:.55rem}.icon-badge{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;margin-bottom:.9rem;border:1px solid var(--accent-soft-border);border-radius:8px;background:var(--accent-soft);color:var(--accent);flex:0 0 auto}.icon-badge svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.split-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:1rem;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.split-panel article{padding:1.35rem 1.4rem}.split-panel article+article{border-left:1px solid var(--border)}.split-panel__label{display:block;margin-bottom:.4rem;color:var(--accent);font-size:.7rem;font-weight:750;letter-spacing:.08em;text-transform:uppercase}.split-panel h3{margin:0 0 .4rem;font-size:1rem;font-weight:680}.split-panel p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.6}.feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.feature-card{position:relative}.feature-card__index{position:absolute;top:1.25rem;right:1.25rem;color:#94a3b8;font-size:.68rem;font-weight:750;letter-spacing:.08em}.reports-layout{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:1.4rem;align-items:start}.report-mock{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 12px 30px #0f172a0f;overflow:hidden}.report-mock__head{display:flex;justify-content:space-between;gap:.75rem;align-items:flex-start;padding:1rem 1.1rem;border-bottom:1px solid var(--border)}.report-mock__head strong{display:block;font-size:.92rem}.report-mock__head small{display:block;margin-top:.1rem;color:var(--muted);font-size:.7rem}.report-mock__table{font-size:.7rem}.report-row{display:grid;grid-template-columns:1fr .85fr .5fr .8fr 1fr;gap:.35rem;padding:.62rem 1.1rem;border-bottom:1px solid #edf1f5;align-items:center}.report-row:last-child{border-bottom:0}.report-row--head{background:#f8fafc;color:var(--muted);font-size:.62rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}.report-row span:not(:first-child){text-align:right}.report-mock__foot{display:flex;justify-content:space-between;gap:.75rem;padding:.8rem 1.1rem;background:#f8fafc;border-top:1px solid var(--border);color:var(--muted);font-size:.72rem}.report-mock__foot strong{color:var(--ink)}.report-list{display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}.report-list article{display:grid;grid-template-columns:36px minmax(0,1fr);gap:.85rem;padding:1rem 1.1rem;border-bottom:1px solid var(--border)}.report-list article:last-child{border-bottom:0}.report-list .icon-badge{margin:0;width:34px;height:34px}.report-list h3{margin-bottom:.2rem;font-size:.9rem}.report-list p{font-size:.84rem;line-height:1.5}.section-link{margin:1.2rem 0 0;font-size:.86rem;font-weight:650}.section--data{max-width:none;background:var(--accent-soft);border-top:1px solid var(--accent-soft-border);border-bottom:1px solid var(--accent-soft-border)}.section--data>*{max-width:var(--max);margin-left:auto;margin-right:auto}.data-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.data-card{min-width:0;padding:1.25rem;background:var(--panel);border:1px solid var(--accent-soft-border);border-radius:var(--radius)}.data-card__label{display:block;margin-bottom:.45rem;color:var(--accent);font-size:.68rem;font-weight:750;letter-spacing:.09em;text-transform:uppercase}.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.5rem;align-items:center;margin-top:1.2rem}.flow>div{display:flex;flex-direction:column;gap:.1rem;min-width:0;padding:.85rem .95rem;background:#ffffffb8;border:1px solid var(--accent-soft-border);border-radius:8px}.flow span{color:var(--accent);font-size:.62rem;font-weight:750;letter-spacing:.08em}.flow strong{font-size:.84rem}.flow small{color:var(--muted);font-size:.72rem}.flow>i{color:#8aa4c1;font-style:normal;text-align:center;font-size:1rem}.flow-note{margin:.75rem 0 0;color:var(--muted);font-size:.78rem;font-weight:600}.section--start{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:3rem;align-items:start;padding-top:4.5rem;padding-bottom:4rem}.start-copy .button{margin-top:1.4rem}.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.75rem}.steps li{display:grid;grid-template-columns:38px minmax(0,1fr);gap:.8rem;padding:.9rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius)}.steps li>span{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-size:.68rem;font-weight:750}.steps strong{display:block;font-size:.9rem}.steps p{margin:.18rem 0 0;color:var(--muted);font-size:.84rem;line-height:1.5}.disclaimer{grid-column:1 / -1;margin:.5rem 0 0;padding-top:1.2rem;border-top:1px solid var(--border);color:var(--muted);font-size:.76rem;line-height:1.6}.site-footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 1.5rem;max-width:var(--max);margin:0 auto;padding:1.5rem;border-top:1px solid var(--border)}.site-footer__links{display:flex;flex-wrap:wrap;gap:1rem}.site-footer__links a{color:var(--muted);font-size:.8rem;font-weight:600}.site-footer__links a:hover{color:var(--ink);text-decoration:none}.site-footer__copyright{flex-basis:100%;margin:0;color:var(--muted);font-size:.75rem}@media (max-width: 980px){.site-nav{display:none}.hero{grid-template-columns:1fr;gap:2.5rem;padding-top:3.2rem}.hero__visual{max-width:640px}.three-grid,.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.reports-layout{grid-template-columns:1fr}.section--start{grid-template-columns:1fr;gap:1.75rem}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.flow>i{display:none}}@media (max-width: 680px){.site-header{padding:.75rem 1rem;gap:.75rem}.brand small{display:none}.hero,.section{padding-left:1rem;padding-right:1rem}.hero h1{font-size:clamp(2.35rem,12vw,3.4rem)}.hero__actions{flex-direction:column;align-items:stretch}.hero__actions .button{width:100%}.app-mock__body{grid-template-columns:1fr}.app-mock__side,.mock-float{display:none}.mock-row{grid-template-columns:1fr .45fr 1fr .9fr}.mock-row span:nth-child(5){display:none}.three-grid,.feature-grid,.split-panel,.data-grid{grid-template-columns:1fr}.split-panel article+article{border-left:0;border-top:1px solid var(--border)}.flow{grid-template-columns:1fr}.report-row{grid-template-columns:1fr .8fr .45fr .75fr}.report-row span:nth-child(5){display:none}.site-footer{flex-direction:column;align-items:flex-start;gap:1rem}}@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="ACB Stock Tracker home">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkFDQiB2YXVsdCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJvZHkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjM2I4NmY3Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzExNDZiNiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZG9vciIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmQ0NTIiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjBhNTAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iNTgiIGhlaWdodD0iNTgiIHJ4PSIxMyIgZmlsbD0idXJsKCNib2R5KSIvPgogIDxyZWN0IHg9IjciIHk9IjciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgcng9IjEwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwZTNhOWUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMjEiIGZpbGw9InVybCgjZG9vcikiIHN0cm9rZT0iI2I5NzkxYSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICA8Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIxOC42IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmY2ZDYiIHN0cm9rZS13aWR0aD0iMS4xIiBvcGFjaXR5PSIwLjc1Ii8+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iNC42IiBmaWxsPSIjMTIzMjVmIi8+CiAgPGcgc3Ryb2tlPSIjMTIzMjVmIiBzdHJva2Utd2lkdGg9IjMuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj4KICAgIDxsaW5lIHgxPSIzMiIgeTE9IjMyIiB4Mj0iMzIiIHkyPSIxNy41Ii8+CiAgICA8bGluZSB4MT0iMzIiIHkxPSIzMiIgeDI9IjMyIiB5Mj0iNDYuNSIvPgogICAgPGxpbmUgeDE9IjMyIiB5MT0iMzIiIHgyPSIxNy41IiB5Mj0iMzIiLz4KICAgIDxsaW5lIHgxPSIzMiIgeTE9IjMyIiB4Mj0iNDYuNSIgeTI9IjMyIi8+CiAgPC9nPgogIDxjaXJjbGUgY3g9IjQ5LjUiIGN5PSIxNC41IiByPSIxLjciIGZpbGw9IiNmZmZmZmYiLz4KPC9zdmc+Cg==" alt="" width="34" height="34" />
+      <span>
+        <strong>ACB Stock Tracker</strong>
+        <small>Adjusted Cost Base for Canadian tax reporting</small>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="Landing page">
+      <a href="#why">Why ACB</a>
+      <a href="#features">Features</a>
+      <a href="#reports">Reports</a>
+      <a href="#data">Data</a>
+      <a href="#start">Start</a>
+    </nav>
+    <a class="button button--primary button--compact" href="acb-stock-tracker.html">Launch App</a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero__copy">
+        <p class="eyebrow">Local-only record keeping</p>
+        <h1>Track ACB with confidence.</h1>
+        <p class="hero__lede">A local-only record-keeping tool for Canadian investors who need to track adjusted cost base across multiple brokerage accounts. Your data stays on your computer, in open XLSX files inside a password-protected archive.</p>
+        <div class="hero__actions">
+          <a class="button button--primary button--large" href="acb-stock-tracker.html">Launch App</a>
+          <a class="button button--ghost button--large" href="#why">See how it works</a>
+        </div>
+        <ul class="trust-list" aria-label="Key properties">
+          <li>Local-only</li>
+          <li>Open XLSX format</li>
+          <li>Password-protected</li>
+          <li>Versioned archives</li>
+        </ul>
+      </div>
+
+      <div class="hero__visual">
+        <div class="app-mock" aria-hidden="true">
+          <div class="app-mock__bar">
+            <span class="app-mock__dots"><i></i><i></i><i></i></span>
+            <span>ACB Stock Tracker</span>
+          </div>
+          <div class="app-mock__body">
+            <aside class="app-mock__side">
+              <span>Accounts</span>
+              <span>Transactions</span>
+              <span>Holdings</span>
+              <span class="is-active">Valuations</span>
+              <span>ACB Summary</span>
+              <span>About</span>
+            </aside>
+            <div class="app-mock__main">
+              <div class="app-mock__heading">
+                <div><strong>Valuations</strong><small>Stock View</small></div>
+                <span class="mock-pill">Updated today</span>
+              </div>
+              <div class="mock-table">
+                <div class="mock-row mock-row--head"><span>Ticker</span><span>Qty</span><span>Price</span><span>Value (CAD)</span><span>Gain</span></div>
+                <div class="mock-row"><span>AAPL</span><span>25</span><span>$185.20 USD</span><span>$6,335.00</span><span class="is-positive">+$1,120.00</span></div>
+                <div class="mock-row"><span>TD.TO</span><span>100</span><span>$92.40 CAD</span><span>$9,240.00</span><span class="is-positive">+$740.00</span></div>
+                <div class="mock-row"><span>XEQT.TO</span><span>300</span><span>$31.10 CAD</span><span>$9,330.00</span><span class="is-positive">+$480.00</span></div>
+                <div class="mock-row"><span>VFV.TO</span><span>50</span><span>$128.40 CAD</span><span>$6,420.00</span><span class="is-positive">+$620.00</span></div>
+              </div>
+              <div class="mock-strip"><span>CAD-USD 1.36</span><span class="is-positive">Last Updated: today 09:42</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="mock-float mock-float--acb"><span>ACB per share</span><strong>$82.14</strong></div>
+        <div class="mock-float mock-float--privacy"><span>Local-only</span><strong>No server</strong></div>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <div class="section__head">
+        <p class="eyebrow">01 / Why ACB</p>
+        <h2>One cost base. Every account.</h2>
+        <p>The Canada Revenue Agency requires investors to track the cost basis of equities such as stocks and ETFs when calculating capital gains and losses. The average cost must be tracked per ticker across all of your brokerage accounts. Individual brokerages cannot do this for you. They also have limits on how long they store statements, so old data may be hard to surface later.</p>
+      </div>
+      <div class="three-grid">
+        <article class="plain-card">
+          <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M7 5v14"/><path d="M7 12h10"/><path d="M17 12v7"/></svg></span>
+          <h3>Per ticker</h3>
+          <p>Cost is tracked by security, not by account. Every purchase and sale must be recorded in CAD.</p>
+        </article>
+        <article class="plain-card">
+          <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1"/><path d="M3 12h18"/></svg></span>
+          <h3>Across every account</h3>
+          <p>A single ACB follows the same ticker across brokerages. A statement from one broker is not enough.</p>
+        </article>
+        <article class="plain-card">
+          <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4v16h16"/><path d="M7 15l3.5-4 3 2.5L20 7"/><path d="M20 7h-4"/><path d="M20 7v4"/></svg></span>
+          <h3>CAD + FX</h3>
+          <p>When a transaction is in USD, the exchange rate at the time of the purchase or sale must also be recorded.</p>
+        </article>
+      </div>
+      <div class="split-panel">
+        <article>
+          <span class="split-panel__label">Non-registered</span>
+          <h3>Track every buy and sell.</h3>
+          <p>For taxable accounts, every buy/sell transaction must be tracked indefinitely because each one affects ACB and future capital gains taxes.</p>
+        </article>
+        <article>
+          <span class="split-panel__label">Registered</span>
+          <h3>No ACB required.</h3>
+          <p>RRSP, TFSA, RESP and RRIF accounts are not taxed on capital gains inside the plan. Use Snapshots to reconcile quantity and cost against statements.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="section__head">
+        <p class="eyebrow">02 / Financial tracking</p>
+        <h2>The rules, accounts and events this app tracks.</h2>
+        <p>Built around the CRA cost-base rules for non-registered accounts, with simpler tools for registered accounts and the events that move holdings between them.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1"/><path d="M3 12h18"/></svg></span>
+          <span class="feature-card__index">01</span>
+          <h3>Account Types</h3>
+          <p>The regular taxable investment account in Canada is called a non-registered account. For these accounts, every buy/sell transaction must be tracked indefinitely because each one affects ACB and future capital gains taxes.</p>
+          <p>Registered accounts such as RRSP, TFSA, RESP and RRIF are different. Capital gains are not taxed inside the plan, so ACB does not need to be tracked.</p>
+        </article>
+        <article class="feature-card">
+          <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v16"/><path d="M8 20h8"/><path d="M6 8h12"/><path d="M4 12l2-4 2 4a2.5 2.5 0 0 1-4 0z"/><path d="M16 12l2-4 2 4a2.5 2.5 0 0 1-4 0z"/></svg></span>
+          <span class="feature-card__index">02</span>
+          <h3>Snapshots</h3>
+          <p>Because ACB is not required for registered accounts, Snapshots feature let you track those holdings with a simpler method. Instead of recording every transaction since inception, you can periodically reconcile the quantity and cost against an account statement.</p>
+        </article>
+        <article class="feature-card">
+          <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/></svg></span>
+          <span class="feature-card__index">03</span>
+          <h3>Account Transfers</h3>
+          <p>Sometimes you have to move assets between brokerage accounts or between CAD and USD accounts. The app helps you log the moves for future reference and track completion.</p>
+        </article>
+        <article class="feature-card">
+          <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><path d="M8 7.5 20 18"/><path d="M8 16.5 20 6"/></svg></span>
+          <span class="feature-card__index">04</span>
+          <h3>Stock Splits</h3>
+          <p>Stocks and funds periodically split or consolidate. This makes it harder to track post-split ACB. Enter the split date and ratio, and the app adjusts quantities and ACB automatically.</p>
+        </article>
+        <article class="feature-card">
+          <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2.5-5 5-5s5 2 5 5"/><path d="M13 20c0-3 1.5-5 3-5 2.5 0 5 2 5 5"/></svg></span>
+          <span class="feature-card__index">05</span>
+          <h3>Joint Accounts</h3>
+          <p>Joint accounts require extra care because ACB is shared 50/50 between the two owners. The app attributes quantities, costs, gains and report rows accordingly.</p>
+        </article>
+        <article class="feature-card">
+          <span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 12h18"/></svg></span>
+          <span class="feature-card__index">06</span>
+          <h3>Portfolios</h3>
+          <p>Optionally group accounts into named portfolios for reporting and filtering. Portfolio membership does not change the underlying accounts or ACB.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="reports">
+      <div class="section__head">
+        <p class="eyebrow">03 / Views and reports</p>
+        <h2>Inspect the same records from every angle.</h2>
+        <p>Use the views to review positions, current value, gains and the remaining cost base. Every save also writes seven report files alongside your data.</p>
+      </div>
+      <div class="reports-layout">
+        <div class="report-mock" aria-hidden="true">
+          <div class="report-mock__head">
+            <div><strong>ACB History</strong><small>AAPL · Jane Doe · Non-registered</small></div>
+            <span class="mock-pill">All activity</span>
+          </div>
+          <div class="report-mock__table">
+            <div class="report-row report-row--head"><span>Date</span><span>Activity</span><span>Qty</span><span>ACB/share</span><span>Remaining</span></div>
+            <div class="report-row"><span>2024-02-12</span><span>Buy</span><span>40</span><span>$74.20</span><span>$2,968.00</span></div>
+            <div class="report-row"><span>2024-06-03</span><span>Buy</span><span>25</span><span>$81.40</span><span>$5,003.00</span></div>
+            <div class="report-row"><span>2024-09-18</span><span>Sell</span><span>-15</span><span>$82.14</span><span>$4,107.00</span></div>
+            <div class="report-row"><span>2025-01-07</span><span>Buy</span><span>10</span><span>$86.10</span><span>$4,968.00</span></div>
+          </div>
+          <div class="report-mock__foot"><span>Remaining quantity <strong>60</strong></span><span>Total ACB <strong>$4,968.00</strong></span></div>
+        </div>
+        <div class="report-list">
+          <article><span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/></svg></span><div><h3>Holdings</h3><p>A consolidated view of stock and fund positions across all accounts, with filters by owner, broker, account, type, currency and ticker.</p></div></article>
+          <article><span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4v16h16"/><path d="M7 15l3.5-4 3 2.5L20 7"/><path d="M20 7h-4"/><path d="M20 7v4"/></svg></span><div><h3>Valuations</h3><p>Retrieve the latest prices and view current value by stock or by account, with summaries by account type and owner.</p></div></article>
+          <article><span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 9h6"/><path d="M9 13h6"/></svg></span><div><h3>Sales Report</h3><p>Capital gains and losses from sales in a selected year, useful for tax reporting and planning.</p></div></article>
+          <article><span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M8 20v-7"/><path d="M12 20V6"/><path d="M16 20v-10"/></svg></span><div><h3>ACB Summary</h3><p>Per-share ACB for each owner.</p></div></article>
+          <article><span class="icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></svg></span><div><h3>ACB History</h3><p>A detailed log per stock or fund showing the remaining ACB after each transaction, so you can verify the calculation.</p></div></article>
+        </div>
+      </div>
+      <p class="section-link"><a href="acb-stock-tracker.html#about">Read the full guide in the app</a></p>
+    </section>
+
+    <section class="section section--data" id="data">
+      <div class="section__head">
+        <p class="eyebrow">04 / App and data</p>
+        <h2>Private by design. Portable by default.</h2>
+        <p>The same care that goes into the cost-base rules goes into how the files are stored, protected and kept readable over time.</p>
+      </div>
+      <div class="data-grid">
+        <article class="data-card">
+          <span class="data-card__label">Data</span>
+          <h3>Your Data is Yours, in Open Format</h3>
+          <p>All data and reports are stored in standard XLSX files protected by a password. You can open them in Excel, Numbers or Pages.</p>
+          <p>On save, the files are bundled into a password-protected ZIP archive that you can store anywhere. The archive is designed to remain readable without this app, so your records are not locked in.</p>
+        </article>
+        <article class="data-card">
+          <span class="data-card__label">Privacy</span>
+          <h3>Security</h3>
+          <p>Your data never goes to a server. The app runs entirely in your browser and writes data only when you click Save. Files are encrypted with your password, and no server ever sees that password.</p>
+          <p>Because the files are encrypted, you can keep them on Google Drive, iCloud, a USB stick or another backup location with reduced risk of casual access.</p>
+        </article>
+        <article class="data-card">
+          <span class="data-card__label">Backups</span>
+          <h3>Safety</h3>
+          <p>Every save creates a new time-stamped, password-protected archive. The app never overwrites your existing archive, so you can keep as many versions as you want.</p>
+          <p>If a change was a mistake, load an earlier archive and continue from there.</p>
+        </article>
+        <article class="data-card">
+          <span class="data-card__label">Portability</span>
+          <h3>Portable App</h3>
+          <p>The entire app is bundled as a single HTML file with no external runtime dependencies. You can save it locally and open it in a browser.</p>
+          <p>You can archive the app alongside your data so both remain usable in the future.</p>
+        </article>
+      </div>
+      <div class="flow" aria-label="Data flow">
+        <div><span>01</span><strong>Your browser</strong><small>The app runs locally</small></div>
+        <i aria-hidden="true">→</i>
+        <div><span>02</span><strong>Open XLSX files</strong><small>Data and reports</small></div>
+        <i aria-hidden="true">→</i>
+        <div><span>03</span><strong>Encrypted ZIP</strong><small>Your password</small></div>
+        <i aria-hidden="true">→</i>
+        <div><span>04</span><strong>Your storage</strong><small>Drive, iCloud, USB</small></div>
+      </div>
+      <p class="flow-note">No app server sits between you and your records.</p>
+    </section>
+
+    <section class="section section--start" id="start">
+      <div class="start-copy">
+        <p class="eyebrow">05 / Start</p>
+        <h2>Your records. Your files. Your control.</h2>
+        <p>Open the app, load an existing archive or start a new file, and save a versioned archive when you are done. No install and no account required.</p>
+        <a class="button button--primary button--large" href="acb-stock-tracker.html">Launch App</a>
+      </div>
+      <ol class="steps">
+        <li><span>01</span><div><strong>Open the app</strong><p>Runs in your browser from a local file or a simple static server.</p></div></li>
+        <li><span>02</span><div><strong>Load or start a file</strong><p>Open an existing password-protected archive or begin with a clean workspace.</p></div></li>
+        <li><span>03</span><div><strong>Save a versioned archive</strong><p>Every save is timestamped, password-protected and kept separate from earlier versions.</p></div></li>
+      </ol>
+      <p class="disclaimer">ACB Stock Tracker is a record-keeping tool, not tax advice. No warranties or accuracy guarantees are offered; use at your own risk. Confirm your reporting with CRA guidance or a qualified tax professional.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="brand brand--small">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByb2xlPSJpbWciIGFyaWEtbGFiZWw9IkFDQiB2YXVsdCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImJvZHkiIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjM2I4NmY3Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzExNDZiNiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZG9vciIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmQ0NTIiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjZjBhNTAwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIzIiB5PSIzIiB3aWR0aD0iNTgiIGhlaWdodD0iNTgiIHJ4PSIxMyIgZmlsbD0idXJsKCNib2R5KSIvPgogIDxyZWN0IHg9IjciIHk9IjciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgcng9IjEwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwZTNhOWUiIHN0cm9rZS13aWR0aD0iMS41Ii8+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iMjEiIGZpbGw9InVybCgjZG9vcikiIHN0cm9rZT0iI2I5NzkxYSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICA8Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIxOC42IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmY2ZDYiIHN0cm9rZS13aWR0aD0iMS4xIiBvcGFjaXR5PSIwLjc1Ii8+CiAgPGNpcmNsZSBjeD0iMzIiIGN5PSIzMiIgcj0iNC42IiBmaWxsPSIjMTIzMjVmIi8+CiAgPGcgc3Ryb2tlPSIjMTIzMjVmIiBzdHJva2Utd2lkdGg9IjMuNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj4KICAgIDxsaW5lIHgxPSIzMiIgeTE9IjMyIiB4Mj0iMzIiIHkyPSIxNy41Ii8+CiAgICA8bGluZSB4MT0iMzIiIHkxPSIzMiIgeDI9IjMyIiB5Mj0iNDYuNSIvPgogICAgPGxpbmUgeDE9IjMyIiB5MT0iMzIiIHgyPSIxNy41IiB5Mj0iMzIiLz4KICAgIDxsaW5lIHgxPSIzMiIgeTE9IjMyIiB4Mj0iNDYuNSIgeTI9IjMyIi8+CiAgPC9nPgogIDxjaXJjbGUgY3g9IjQ5LjUiIGN5PSIxNC41IiByPSIxLjciIGZpbGw9IiNmZmZmZmYiLz4KPC9zdmc+Cg==" alt="" width="26" height="26" />
+      <span><strong>ACB Stock Tracker</strong><small>Version 2.0.0</small></span>
+    </div>
+    <div class="site-footer__links">
+      <a href="acb-stock-tracker.html">Launch App</a>
+      <a href="acb-stock-tracker.html#about">Full guide</a>
+      <a href="#top">Back to top</a>
+    </div>
+    <p class="site-footer__copyright">Copyright © 2026 ACB Stock Tracker. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (function () {
+      var views = {
+        accounts: 1, transactions: 1, splits: 1, transfers: 1, snapshots: 1,
+        holdings: 1, valuations: 1, sales: 1, acb: 1, 'acb-history': 1,
+        portfolios: 1, about: 1
+      };
+      var hash = location.hash.replace(/^#/, '');
+      var params = new URLSearchParams(location.search);
+      if (views[hash] || params.get('view')) {
+        location.replace('acb-stock-tracker.html' + location.search + location.hash);
+      }
+    })();
+  </script>
+</body>
+</html>
